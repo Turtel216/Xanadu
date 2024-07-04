@@ -7,6 +7,8 @@
 void runFile(std::string file);
 void runPrompt();
 void run(std::string str);
+void error(int line, std::string message);
+void report(int line, std::string where, std::string message);
 
 int main (int argc, char *argv[]) {
   // check command line arguments
@@ -74,4 +76,15 @@ void run(std::string input)
   {
        std::cout << token;
   }
+}
+
+void error(int line, std::string message)
+{
+  report(line, "", message);
+}
+
+void report(int line, std::string where, std::string message)
+{
+  std::cout << "[line " << line << "] Error"
+    << where << ": " << message << std::endl;
 }
