@@ -8,10 +8,15 @@ class Xenadu
 {
 public:
   static bool hadErr;
-  static int runFile(std::string file);
-  static void runPrompt();
-  static void run(std::string str);
+  // interpreter given file
+  static int runFile(std::string file) noexcept;
+  // run command prompt interpreter
+  static void runPrompt() noexcept;
+  // runs the interpreter
+  static void run(std::string str) noexcept;
+  // throw an interpreter error
   static void error(int line, std::string message) noexcept;
+  // display an interpreter error
   static void report(int line, std::string where, std::string message) noexcept;
 };
 
@@ -34,7 +39,7 @@ int main (int argc, char *argv[]) {
 }
 
 // interpreter given file
-int Xenadu::runFile(std::string file)
+int Xenadu::runFile(std::string file) noexcept
 {
   std::string text;
   std::ifstream source_file(file);
@@ -53,7 +58,7 @@ int Xenadu::runFile(std::string file)
 }
 
 // run command prompt interpreter
-void Xenadu::runPrompt()
+void Xenadu::runPrompt() noexcept
 {
   std::string input = "";
 
@@ -71,7 +76,8 @@ void Xenadu::runPrompt()
   }
 }
 
-void Xenadu::run(std::string input)
+// runs the interpreter
+void Xenadu::run(std::string input) noexcept
 {
   // vector holding tokens
   std::vector<std::string> tokens;
@@ -80,21 +86,19 @@ void Xenadu::run(std::string input)
   std::string intermediate;
   // tokenizing input string based on space ' '
   while (std::getline(stream, intermediate, ' '))
-  {
     tokens.push_back(intermediate);
-  }
 
   for (auto token : tokens)
-  {
-       std::cout << token;
-  }
+    std::cout << token;
 }
 
+// throw an interpreter error
 void Xenadu::error(int line, std::string message) noexcept
 {
   Xenadu::report(line, "", message);
 }
 
+// display an interpreter error
 void Xenadu::report(int line, std::string where, std::string message) noexcept
 {
   std::cout << "[line " << line << "] Error"
