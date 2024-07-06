@@ -2,7 +2,8 @@
 
 namespace xanadu::Types {
 
-auto getLiteralString(const Literal& value) -> std::string {
+std::string getLiteralString(const Literal& value)
+{
   // Literal = std::variant<std::string, double>;
   switch (value.index()) {
     case 0:  // string
@@ -24,12 +25,13 @@ auto getLiteralString(const Literal& value) -> std::string {
   }
 }
 
-auto makeOptionalLiteral(double dVal) -> OptionalLiteral {
+OptionalLiteral makeOptionalLiteral(double dVal)
+{
   return OptionalLiteral(std::in_place, dVal);
 }
 
-auto makeOptionalLiteral(const std::string& lexeme) -> OptionalLiteral {
+OptionalLiteral makeOptionalLiteral(const std::string& lexeme)
+{
   return OptionalLiteral(std::in_place, lexeme);
 }
-
 }

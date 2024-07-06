@@ -11,11 +11,11 @@ namespace xanadu::Types {
 using Literal = std::variant<std::string, double>;
 using OptionalLiteral = std::optional<Literal>;
 
-auto getLiteralString(const Literal& value) -> std::string;
+std::string getLiteralString(const Literal& value);
 
-auto makeOptionalLiteral(double dVal) -> OptionalLiteral;
+OptionalLiteral makeOptionalLiteral(double dVal);
 
-auto makeOptionalLiteral(const std::string& lexeme) -> OptionalLiteral;
+OptionalLiteral makeOptionalLiteral(const std::string& lexeme);
 
 }
 #endif

@@ -3,6 +3,9 @@
 
 namespace xanadu::Tokens 
 {
+
+using OptionalLiteral = xanadu::Types::OptionalLiteral;
+
 enum TokenType
 {
    // Single-character tokens.
@@ -42,7 +45,7 @@ public:
   //Getters
   TokenType getType() const noexcept;
   std::string getLexeme() const noexcept;
-  xanadu::Types::OptionalLiteral getLiteral() const noexcept;
+  OptionalLiteral getLiteral() const noexcept;
   int getLine() const noexcept;
 
   // Convert Token class to string
