@@ -1,24 +1,33 @@
 #include <string>
 #include <vector>
 #include "../Types/Token.h"
+
 namespace xanadu::Scanner
 {
 class Scanner
 {
 private:
   const std::string source;
-  const std::vector<xanadu::Tokens::Token> tokens;
+  std::vector<xanadu::Tokens::Token> tokens;
   int start = 0;
   int current = 0;
   int line = 1;
 
   void scanToken() noexcept;
+  bool isAtEnd() const noexcept;
+  char advance() noexcept;
+  void addToken(Tokens::TokenType type) noexcept;
+  void addToken(Tokens::TokenType type, Types::OptionalLiteral literal) noexcept;
 
 public:
   Scanner(const std::string _source) noexcept
   : source(_source) {}
 
   std::vector<xanadu::Tokens::Token> scanTokens() noexcept;
+
+  // Getters
+  std::string getSource() const noexcept;
+  std::vector<xanadu::Tokens::Token> getTokens() const noexcept;
 
 };
 

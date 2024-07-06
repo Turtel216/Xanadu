@@ -63,5 +63,4 @@ std::string Token::to_string() const noexcept
 {
   return token_toString(type) + " " + lexeme + " " + xanadu::Types::getLiteralString(literal.value());
 }
-
 }

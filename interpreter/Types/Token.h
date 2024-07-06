@@ -38,7 +38,7 @@ private:
 
 public:
   Token(const TokenType _type, std::string _lexeme,
-        std::string _literal, int _line) noexcept
+        xanadu::Types::OptionalLiteral _literal, int _line) noexcept
         : type(_type), lexeme(_lexeme),
         literal(_literal), line(_line) {}
 
