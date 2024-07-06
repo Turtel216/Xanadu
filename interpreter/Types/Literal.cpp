@@ -32,4 +32,4 @@ auto makeOptionalLiteral(const std::string& lexeme) -> OptionalLiteral {
   return OptionalLiteral(std::in_place, lexeme);
 }
 
-}  // namespace cpplox::Types
+}

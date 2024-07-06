@@ -17,6 +17,5 @@ auto makeOptionalLiteral(double dVal) -> OptionalLiteral;
 
 auto makeOptionalLiteral(const std::string& lexeme) -> OptionalLiteral;
 
-}  // namespace cpplox::Types
-
-#endif  // CPPLOX_TYPES_LITERAL_H
+}
+#endif
