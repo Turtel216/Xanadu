@@ -1,5 +1,7 @@
+#include "Literal.h"
 #include <string>
-namespace token 
+
+namespace xanadu::Tokens 
 {
 enum TokenType
 {
@@ -25,16 +27,23 @@ enum TokenType
 
 class Token 
 {
-public:
+private:
   const TokenType type;
   const std::string lexeme;
-  const std::string literal;
+  xanadu::Types::OptionalLiteral literal = std::nullopt;
   const int line;
 
+public:
   Token(const TokenType _type, std::string _lexeme,
         std::string _literal, int _line) noexcept
         : type(_type), lexeme(_lexeme),
         literal(_literal), line(_line) {}
+
+  //Getters
+  TokenType getType() const noexcept;
+  std::string getLexeme() const noexcept;
+  xanadu::Types::OptionalLiteral getLiteral() const noexcept;
+  int getLine() const noexcept;
 
   // Convert Token class to string
   std::string to_string() const noexcept;
