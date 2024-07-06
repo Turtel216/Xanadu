@@ -37,6 +37,18 @@ void Scanner::scanToken() noexcept
       case '+': addToken(PLUS); break;
       case ';': addToken(SEMICOLON); break;
       case '*': addToken(STAR); break;
+      case '!':
+        addToken(match('=') ? BANG_EQUAL : BANG);
+        break;
+      case '=':
+        addToken(match('=') ? EQUAL_EQUAL : EQUAL);
+        break;
+      case '<':
+        addToken(match('=') ? LESS_EQUAL : LESS);
+        break;
+      case '>':
+        addToken(match('=') ? GREATER_EQUAL : GREATER);
+        break;
     default:
       xanadu::Xanadu::error(line, "Unexpected character.");
       break;
@@ -51,5 +63,14 @@ void Scanner::addToken(Tokens::TokenType type,
 {
   std::string text = source.substr(start, current);
   tokens.push_back(Tokens::Token(type, text, literal, line));
+}
+
+bool Scanner::match(char expected) noexcept 
+{
+  if (isAtEnd()) return false;
+  if (source.at(current) != expected) return false;
+
+  current++;
+  return true;
 }
 }

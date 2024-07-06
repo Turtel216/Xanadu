@@ -18,6 +18,7 @@ private:
   char advance() noexcept;
   void addToken(Tokens::TokenType type) noexcept;
   void addToken(Tokens::TokenType type, Types::OptionalLiteral literal) noexcept;
+  bool match(char expected) noexcept;
 
 public:
   Scanner(const std::string _source) noexcept
