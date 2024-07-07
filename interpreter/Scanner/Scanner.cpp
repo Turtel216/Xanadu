@@ -6,7 +6,7 @@
 
 using namespace xanadu::Tokens;
 
-namespace xanadu::Scanner {
+namespace xanadu {
 
 // initialize keywords map
 Scanner::keywords_map Scanner::keywords = {
@@ -24,6 +24,7 @@ std::vector<xanadu::Tokens::Token> Scanner::getTokens() const noexcept {
   return this->tokens;
 }
 
+// Parse string for tokens
 std::vector<xanadu::Tokens::Token> Scanner::scanTokens() noexcept {
   while (!isAtEnd()) {
     start = current;
@@ -34,6 +35,7 @@ std::vector<xanadu::Tokens::Token> Scanner::scanTokens() noexcept {
   return tokens;
 }
 
+// Map chararcters to Token enums
 void Scanner::scanToken() noexcept {
   char _char = advance();
   switch (_char) {
@@ -113,17 +115,22 @@ void Scanner::scanToken() noexcept {
   }
 }
 
+// Check if the end of the string is reached
 bool Scanner::isAtEnd() const noexcept { return current >= source.length(); }
+// Continue to the next character
 char Scanner::advance() noexcept { return source.at(current++); }
+// Add token enum to map
 void Scanner::addToken(Tokens::TokenType type) noexcept {
   addToken(type, nullptr);
 }
+// Add token enum to map
 void Scanner::addToken(Tokens::TokenType type,
                        Types::OptionalLiteral literal) noexcept {
   std::string text = source.substr(start, current);
   tokens.push_back(Tokens::Token(type, text, literal, line));
 }
 
+// Consume current character if next character is the expected character
 bool Scanner::match(char expected) noexcept {
   if (isAtEnd())
     return false;
@@ -134,6 +141,7 @@ bool Scanner::match(char expected) noexcept {
   return true;
 }
 
+// Check for number enum and add it to map
 void Scanner::number() noexcept {
   while (isdigit(peek())) {
     // check if factorial part
@@ -149,14 +157,14 @@ void Scanner::number() noexcept {
   addToken(NUMBER, std::stod(source.substr(start, current)));
 }
 
-// look ahead to next char
+// look ahead and return next chararacter
 char Scanner::peek() const noexcept {
   if (isAtEnd())
     return '\0';
   return source.at(current);
 }
 
-// look 2 chars ahead
+// look 2 chararacters ahead and return it
 char Scanner::peekNext() const noexcept {
   if (current + 1 >= source.length())
     return '\n';
@@ -184,6 +192,8 @@ void Scanner::string() noexcept {
   addToken(STRING, value);
 }
 
+// Check if token is an identifier or keyword
+// and add to map accordingly
 void Scanner::identifier() noexcept {
   while (isAlphaNumeric(peek()))
     advance();
@@ -203,12 +213,14 @@ void Scanner::identifier() noexcept {
     addToken(type_iterator->second);
 }
 
+// Check if character is alpharithmic
 bool Scanner::isAlpha(char _char) const noexcept {
   return (_char >= 'a' && _char <= 'z') || (_char >= 'A' && _char <= 'Z') ||
          _char == '_';
 }
 
+// Check if character is alphanumeric
 bool Scanner::isAlphaNumeric(char _char) const noexcept {
   return isAlpha(_char) || isdigit(_char);
 }
-} // namespace xanadu::Scanner
+} // namespace xanadu
