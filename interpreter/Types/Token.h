@@ -64,8 +64,8 @@ private:
 
 public:
   Token(const TokenType _type, std::string _lexeme,
-        xanadu::Types::OptionalLiteral _literal, int _line) noexcept
-      : type(_type), lexeme(_lexeme), literal(_literal), line(_line) {}
+        xanadu::Types::OptionalLiteral _literal, int _line) noexcept;
+  Token() noexcept = delete;
 
   // Getters
   TokenType getType() const noexcept;

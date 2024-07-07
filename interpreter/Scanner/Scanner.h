@@ -50,7 +50,8 @@ private:
   void identifier() noexcept;
 
 public:
-  Scanner(const std::string _source) noexcept : source(_source) {}
+  Scanner(const std::string _source) noexcept;
+  Scanner() noexcept = delete;
 
   // Parse string for tokens
   std::vector<xanadu::Tokens::Token> scanTokens() noexcept;

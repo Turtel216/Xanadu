@@ -18,6 +18,9 @@ Scanner::keywords_map Scanner::keywords = {
     {"here_again", WHILE},
 };
 
+// Scanner constructor
+Scanner::Scanner(const std::string _source) noexcept : source(_source) {}
+
 // Getters
 std::string Scanner::getSource() const noexcept { return this->source; }
 std::vector<xanadu::Tokens::Token> Scanner::getTokens() const noexcept {
@@ -203,7 +206,7 @@ void Scanner::identifier() noexcept {
   auto text = source.substr(start, current);
 
   // get the iterator pointing to the string value,
-  // returns end iterator if not found
+  // returns 'end' iterator if not found
   auto type_iterator = keywords.find(text);
 
   // if the identifier is not a keyword,

@@ -50,6 +50,11 @@ std::string token_toString(const TokenType type) noexcept {
   return lookUpTable.find(type)->second;
 }
 
+// Token constructor
+Token::Token(const TokenType _type, std::string _lexeme,
+             xanadu::Types::OptionalLiteral _literal, int _line) noexcept
+    : type(_type), lexeme(_lexeme), literal(_literal), line(_line) {}
+
 // Getters
 TokenType Token::getType() const noexcept { return type; }
 std::string Token::getLexeme() const noexcept { return lexeme; }
