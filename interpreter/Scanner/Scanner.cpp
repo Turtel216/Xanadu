@@ -70,6 +70,7 @@ void Scanner::scanToken() noexcept
     case '\n':
       line++;
       break;
+    case '"': string(); break;
 
     default:
       xanadu::Xanadu::error(line, "Unexpected character.");
@@ -104,4 +105,26 @@ char Scanner::peek() const noexcept
   return source.at(current);
 }
 
+void Scanner::string() noexcept 
+{
+  while (peek() != '"' && !isAtEnd()) 
+  {
+    if (peek() == '\n')
+      ++line;
+
+    advance();
+  }
+
+  if (isAtEnd()) 
+  {
+    xanadu::Xanadu::error(line, "Unterminated string");
+    return;
+  }
+
+  advance();
+
+  // Trim the surrounding quotes
+  auto value = source.substr(start + 1, current - 1);
+  addToken(STRING, value);
+}
 }

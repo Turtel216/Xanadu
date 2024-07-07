@@ -21,6 +21,7 @@ private:
   void addToken(Tokens::TokenType type, Types::OptionalLiteral literal) noexcept;
   bool match(char expected) noexcept;
   char peek() const noexcept;
+  void string() noexcept;
 
 public:
   Scanner(const std::string _source) noexcept
