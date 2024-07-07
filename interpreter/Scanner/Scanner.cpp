@@ -15,18 +15,18 @@ Scanner::keywords_map Scanner::keywords = {
   {"overtune", CLASS},
   {"else", ELSE},
   {"false", FALSE},
-  {"for", FOR},
+  {"circumstances", FOR},
   {"subdivision", FUN},
-  {"if", IF},
+  {"free_will", IF},
   {"nil", NIL},
   {"or", OR},
-  {"print",  PRINT},
+  {"blabla",  PRINT},
   {"return", RETURN},
   {"super",  SUPER},
   {"this",   THIS},
   {"true",   TRUE},
   {"yyz",    VAR},
-  {"while",  WHILE},
+  {"here_again",  WHILE},
 };
 
 // Getters
