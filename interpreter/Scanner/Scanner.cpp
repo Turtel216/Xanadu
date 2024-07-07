@@ -8,6 +8,27 @@ using namespace xanadu::Tokens;
 
 namespace xanadu::Scanner
 {
+
+// initialize keywords map
+Scanner::keywords_map Scanner::keywords = {
+  {"and", AND},
+  {"overtune", CLASS},
+  {"else", ELSE},
+  {"false", FALSE},
+  {"for", FOR},
+  {"subdivision", FUN},
+  {"if", IF},
+  {"nil", NIL},
+  {"or", OR},
+  {"print",  PRINT},
+  {"return", RETURN},
+  {"super",  SUPER},
+  {"this",   THIS},
+  {"true",   TRUE},
+  {"yyz",    VAR},
+  {"while",  WHILE},
+};
+
 // Getters
 std::string Scanner::getSource() const noexcept { return this->source; }
 std::vector<xanadu::Tokens::Token> Scanner::getTokens() const noexcept { return this->tokens; }
@@ -104,9 +125,9 @@ bool Scanner::match(char expected) noexcept
   return true;
 }
 
-void Scanner::number(char _char) noexcept 
+void Scanner::number() noexcept 
 {
-  while(isdigit(_char)) 
+  while(isdigit(peek())) 
   {
     // check if factorial part 
     if (peek() == '.' && isdigit(peekNext())) 
