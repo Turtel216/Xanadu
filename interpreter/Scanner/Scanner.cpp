@@ -162,4 +162,36 @@ void Scanner::string() noexcept
   auto value = source.substr(start + 1, current - 1);
   addToken(STRING, value);
 }
+
+void Scanner::identifier() noexcept 
+{
+  while(isAlphaNumeric(peek()))
+    advance();
+
+  auto text = source.substr(start, current);
+
+  // get the iterator pointing to the string value,
+  // returns end iterator if not found
+  auto type_iterator = keywords.find(text);
+
+  // if the identifier is not a keyword, 
+  // add identifier
+  if (type_iterator == keywords.end())
+    addToken(IDENTIFIER);
+  else 
+    // else add the keyword
+    addToken(type_iterator->second);
+}
+
+bool Scanner::isAlpha(char _char) const noexcept 
+{
+  return (_char >= 'a' && _char <= 'z') ||
+           (_char >= 'A' && _char <= 'Z') ||
+            _char == '_';
+}
+
+bool Scanner::isAlphaNumeric(char _char) const noexcept 
+{
+  return isAlpha(_char) || isdigit(_char);
+}
 }
