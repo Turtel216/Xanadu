@@ -3,7 +3,6 @@
 #include <string>
 
 int main(int argc, char *argv[]) {
-  xanadu::Xanadu::hadErr = false;
   // check command line arguments
   // if more then one is given exit
   if (argc > 1) {

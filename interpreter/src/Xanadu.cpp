@@ -6,6 +6,10 @@
 #include <vector>
 
 namespace xanadu {
+
+// instanciete bool variable
+bool Xanadu::hadErr = false;
+
 // interprete given file
 int Xanadu::runFile(std::string file) noexcept {
   std::string text;
