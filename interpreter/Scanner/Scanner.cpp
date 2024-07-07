@@ -10,12 +10,22 @@ namespace xanadu {
 
 // initialize keywords map
 Scanner::keywords_map Scanner::keywords = {
-    {"and", AND},          {"overtune", CLASS},    {"else", ELSE},
-    {"false", FALSE},      {"circumstances", FOR}, {"subdivision", FUN},
-    {"free_will", IF},     {"nil", NIL},           {"or", OR},
-    {"blabla", PRINT},     {"return", RETURN},     {"super", SUPER},
-    {"this", THIS},        {"true", TRUE},         {"yyz", VAR},
-    {"here_again", WHILE},
+    {"and", AND},
+    {"overtune", CLASS},
+    {"Choose_not_to_decide", ELSE},
+    {"false", FALSE},
+    {"circumstances", FOR},
+    {"subdivision", FUN},
+    {"Freewill", IF},
+    {"Cygnus", NIL},
+    {"or", OR},
+    {"blabla", PRINT},
+    {"limelight", RETURN},
+    {"super", SUPER},
+    {"this", THIS},
+    {"true", TRUE},
+    {"yyz", VAR},
+    {"Workingmans_grind", WHILE},
 };
 
 // Scanner constructor

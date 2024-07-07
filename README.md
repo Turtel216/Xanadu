@@ -22,9 +22,9 @@ To write to the console use the **blabla** keyword
 
 ### Control flow
 
-**while** loops are declared using the **here_again** keyword 
+**while** loops are declared using the **Workingmans_grind** keyword 
 
-        here_again(true) {
+        Workingmans_grind(true) {
             blabla "Rush rocks!"
         }
 
@@ -32,10 +32,19 @@ To write to the console use the **blabla** keyword
 
         circumstances()
 
-**if** statements are declared using the **free_will** keyword
+**if** statements are declared using the **Freewill** keyword
 
-        free_will(1 == 1) {
+        Freewill(1 == 1) {
             blabla "I will choose free will"
+        }
+
+**else** statements are declaed using the **Choose_not_to_decide** keyword 
+
+
+        Freewill(1 == 2) {
+            blabla "I will choose free will"
+        } Choose_not_to_decide {
+            blabla "You still made choice"
         }
 
 ### Functions
@@ -43,8 +52,10 @@ To write to the console use the **blabla** keyword
 Functions are declared using the **subdivision** keyword 
 
         subdivision add(a, b) {
-            return a + b
+            limelight a + b
         }
+
+The **limelight** keyword in the above example functions just as a **return** keyword in other languages
 
 ### Classes
 
