@@ -6,7 +6,7 @@ class Xanadu
 {
 public:
   static bool hadErr;
-  // interpreter given file
+  // interprete given file
   static int runFile(std::string file) noexcept;
   // run command prompt interpreter
   static void runPrompt() noexcept;

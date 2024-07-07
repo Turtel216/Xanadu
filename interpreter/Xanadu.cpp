@@ -7,7 +7,7 @@
 
 namespace xanadu 
 {
-// interpreter given file
+// interprete given file
 int Xanadu::runFile(std::string file) noexcept
 {
   std::string text;

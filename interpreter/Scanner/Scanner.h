@@ -13,12 +13,14 @@ private:
   int current = 0;
   int line = 1;
 
+  // Helper methods
   void scanToken() noexcept;
   bool isAtEnd() const noexcept;
   char advance() noexcept;
   void addToken(Tokens::TokenType type) noexcept;
   void addToken(Tokens::TokenType type, Types::OptionalLiteral literal) noexcept;
   bool match(char expected) noexcept;
+  char peek() const noexcept;
 
 public:
   Scanner(const std::string _source) noexcept

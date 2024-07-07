@@ -11,7 +11,7 @@ int main (int argc, char *argv[]) {
     std::cout << "Usage: xanadu [script]" << std::endl;
     return 0;
   } else if (argc == 1) // if a file name is given
-    // interpreter given file
+    // interprete given file
     return xanadu::Xanadu::runFile(argv[0]);
   else 
     // open command prompt interpreter
