@@ -108,6 +108,8 @@ void Scanner::scanToken() noexcept {
   default:
     if (isdigit(_char)) {
       number();
+    } else if (isAlpha(_char)) {
+      identifier();
     } else {
       xanadu::Xanadu::error(line, "Unexpected character.");
     }
