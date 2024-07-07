@@ -3,13 +3,11 @@
 #include <map>
 #include <string>
 
-namespace xanadu::Tokens 
-{
+namespace xanadu::Tokens {
 using OptionalLiteral = xanadu::Types::OptionalLiteral;
 
 // Convert token enum to string
-std::string token_toString(const TokenType type) noexcept 
-{
+std::string token_toString(const TokenType type) noexcept {
   static const std::map<TokenType, std::string> lookUpTable{
       {TokenType::LEFT_PAREN, "LEFT_PAREN"},
       {TokenType::RIGHT_PAREN, "RIGHT_PAREN"},
@@ -59,8 +57,8 @@ OptionalLiteral Token::getLiteral() const noexcept { return literal; }
 int Token::getLine() const noexcept { return line; }
 
 // Convert Token class to string
-std::string Token::to_string() const noexcept
-{
-  return token_toString(type) + " " + lexeme + " " + xanadu::Types::getLiteralString(literal.value());
+std::string Token::to_string() const noexcept {
+  return token_toString(type) + " " + lexeme + " " +
+         xanadu::Types::getLiteralString(literal.value());
 }
-}
+} // namespace xanadu::Tokens

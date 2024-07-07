@@ -1,15 +1,13 @@
+#include "../Types/Token.h"
 #include <complex>
 #include <map>
 #include <string>
 #include <vector>
-#include "../Types/Token.h"
 
 using namespace xanadu::Tokens;
 
-namespace xanadu::Scanner
-{
-class Scanner
-{
+namespace xanadu::Scanner {
+class Scanner {
 private:
   const std::string source;
   std::vector<xanadu::Tokens::Token> tokens;
@@ -25,7 +23,8 @@ private:
   bool isAtEnd() const noexcept;
   char advance() noexcept;
   void addToken(Tokens::TokenType type) noexcept;
-  void addToken(Tokens::TokenType type, Types::OptionalLiteral literal) noexcept;
+  void addToken(Tokens::TokenType type,
+                Types::OptionalLiteral literal) noexcept;
   bool match(char expected) noexcept;
   char peek() const noexcept;
   char peekNext() const noexcept;
@@ -36,16 +35,12 @@ private:
   void identifier() noexcept;
 
 public:
-  Scanner(const std::string _source) noexcept
-  : source(_source) 
-  {
-  }
+  Scanner(const std::string _source) noexcept : source(_source) {}
 
   std::vector<xanadu::Tokens::Token> scanTokens() noexcept;
 
   // Getters
   std::string getSource() const noexcept;
   std::vector<xanadu::Tokens::Token> getTokens() const noexcept;
-
 };
-}
+} // namespace xanadu::Scanner

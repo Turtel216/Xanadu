@@ -1,9 +1,7 @@
 #include <string>
 
-namespace xanadu
-{
-class Xanadu
-{
+namespace xanadu {
+class Xanadu {
 public:
   static bool hadErr;
   // interprete given file
@@ -17,4 +15,4 @@ public:
   // display an interpreter error
   static void report(int line, std::string where, std::string message) noexcept;
 };
-}
+} // namespace xanadu
