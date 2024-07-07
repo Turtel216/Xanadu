@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.30)
 project(Xanadu)
 
-add_library(token.cpp)
-add_executable(Xanadu main.cpp)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+add_executable ( xanadu_interpreter src/main.cpp src/Xanadu.cpp src/Types/Token.cpp src/Types/Literal.cpp src/Scanner/Scanner.cpp)

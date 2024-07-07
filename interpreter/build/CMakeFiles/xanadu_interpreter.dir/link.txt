@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/xanadu_interpreter.dir/src/main.cpp.o CMakeFiles/xanadu_interpreter.dir/src/Xanadu.cpp.o CMakeFiles/xanadu_interpreter.dir/src/Types/Token.cpp.o CMakeFiles/xanadu_interpreter.dir/src/Types/Literal.cpp.o CMakeFiles/xanadu_interpreter.dir/src/Scanner/Scanner.cpp.o -o xanadu_interpreter

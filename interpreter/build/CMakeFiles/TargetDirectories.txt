@@ -1,0 +1,3 @@
+/home/dimi/Documents/Dev/xanadu/interpreter/build/CMakeFiles/xanadu_interpreter.dir
+/home/dimi/Documents/Dev/xanadu/interpreter/build/CMakeFiles/edit_cache.dir
+/home/dimi/Documents/Dev/xanadu/interpreter/build/CMakeFiles/rebuild_cache.dir
