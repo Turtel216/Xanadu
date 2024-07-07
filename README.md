@@ -79,3 +79,7 @@ overtune Band
 
 }
 ```
+
+## The Xanadu Interpreter
+
+The Tree-walk interpreter is implemented in the C++ programming language and produces byte code for the [Java virtual machine](https://docs.oracle.com/en/java/javase/22/vm/java-virtual-machine-technology-overview.html). Both the [lexer](https://en.wikipedia.org/wiki/Lexical_analysis) and the [parser](https://www.techopedia.com/definition/3854/parser) are implemented from scratch, no third party dependencies were used while building this project.
