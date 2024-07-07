@@ -1,3 +1,4 @@
+#include <cctype>
 #include <string>
 #include <vector>
 #include "Scanner.h"
@@ -73,7 +74,13 @@ void Scanner::scanToken() noexcept
     case '"': string(); break;
 
     default:
-      xanadu::Xanadu::error(line, "Unexpected character.");
+      if (isdigit(_char)) 
+      {
+        number();
+      } else 
+      {
+        xanadu::Xanadu::error(line, "Unexpected character.");
+      }
       break;
   }
 }
@@ -97,6 +104,25 @@ bool Scanner::match(char expected) noexcept
   return true;
 }
 
+void Scanner::number(char _char) noexcept 
+{
+  while(isdigit(_char)) 
+  {
+    // check if factorial part 
+    if (peek() == '.' && isdigit(peekNext())) 
+    {
+      advance();
+
+      while (isdigit(peek()))
+        advance();
+    }
+  }
+
+  // Convert string to double and add to tokens
+  addToken(NUMBER,
+           std::stod(source.substr(start, current)));
+}
+
 // look ahead to next char
 char Scanner::peek() const noexcept
 {
@@ -105,6 +131,15 @@ char Scanner::peek() const noexcept
   return source.at(current);
 }
 
+// look 2 chars ahead
+char Scanner::peekNext() const noexcept 
+{
+  if (current + 1 >= source.length())
+    return '\n';
+  return source.at(current + 1);
+}
+
+// Add value of string literal
 void Scanner::string() noexcept 
 {
   while (peek() != '"' && !isAtEnd()) 
