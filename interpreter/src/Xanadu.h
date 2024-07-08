@@ -13,6 +13,7 @@ public:
   // throw an interpreter error
   static void error(int line, std::string message) noexcept;
   // display an interpreter error
-  static void report(int line, std::string where, std::string message) noexcept;
+  inline static void report(int line, std::string where,
+                            std::string message) noexcept;
 };
 } // namespace xanadu

@@ -29,7 +29,7 @@ Scanner::keywords_map Scanner::keywords = {
 };
 
 // Scanner constructor
-Scanner::Scanner(const std::string _source) noexcept : source(_source) {}
+Scanner::Scanner(const std::string &_source) noexcept : source(_source) {}
 
 // Getters
 std::string Scanner::getSource() const noexcept { return this->source; }
@@ -131,11 +131,13 @@ void Scanner::scanToken() noexcept {
 }
 
 // Check if the end of the string is reached
-bool Scanner::isAtEnd() const noexcept { return current >= source.length(); }
+inline bool Scanner::isAtEnd() const noexcept {
+  return current >= source.length();
+}
 // Continue to the next character
-char Scanner::advance() noexcept { return source.at(current++); }
+inline char Scanner::advance() noexcept { return source.at(current++); }
 // Add token enum to map
-void Scanner::addToken(Tokens::TokenType type) noexcept {
+inline void Scanner::addToken(Tokens::TokenType type) noexcept {
   addToken(type, nullptr);
 }
 // Add token enum to map
@@ -229,13 +231,13 @@ void Scanner::identifier() noexcept {
 }
 
 // Check if character is alpharithmic
-bool Scanner::isAlpha(char _char) const noexcept {
+inline bool Scanner::isAlpha(char _char) const noexcept {
   return (_char >= 'a' && _char <= 'z') || (_char >= 'A' && _char <= 'Z') ||
          _char == '_';
 }
 
 // Check if character is alphanumeric
-bool Scanner::isAlphaNumeric(char _char) const noexcept {
+inline bool Scanner::isAlphaNumeric(char _char) const noexcept {
   return isAlpha(_char) || isdigit(_char);
 }
 } // namespace xanadu

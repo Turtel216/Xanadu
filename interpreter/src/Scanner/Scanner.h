@@ -23,11 +23,11 @@ private:
   // Map chararcters to Token enums
   void scanToken() noexcept;
   // Check if the end of the string is reached
-  bool isAtEnd() const noexcept;
+  inline bool isAtEnd() const noexcept;
   // Continue to the next character
-  char advance() noexcept;
+  inline char advance() noexcept;
   // Add token enum to map
-  void addToken(Tokens::TokenType type) noexcept;
+  inline void addToken(Tokens::TokenType type) noexcept;
   // Add token enum to map
   void addToken(Tokens::TokenType type,
                 Types::OptionalLiteral literal) noexcept;
@@ -42,15 +42,15 @@ private:
   // Check for number enum and add it to map
   void number() noexcept;
   // Check if character is alpharithmic
-  bool isAlpha(char) const noexcept;
+  inline bool isAlpha(char) const noexcept;
   // Check if character is alphanumeric
-  bool isAlphaNumeric(char) const noexcept;
+  inline bool isAlphaNumeric(char) const noexcept;
   // Check if token is an identifier or keyword
   // and add to map accordingly
   void identifier() noexcept;
 
 public:
-  Scanner(const std::string _source) noexcept;
+  Scanner(const std::string &_source) noexcept;
   Scanner() noexcept = delete;
 
   // Parse string for tokens
