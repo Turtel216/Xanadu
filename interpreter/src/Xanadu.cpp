@@ -63,7 +63,7 @@ void Xanadu::run(std::string input) noexcept {
 }
 
 // throw an interpreter error
-inline void Xanadu::error(int line, std::string message) noexcept {
+void Xanadu::error(int line, std::string message) noexcept {
   Xanadu::report(line, "", message);
 }
 
