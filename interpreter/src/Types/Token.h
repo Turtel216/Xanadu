@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Literal.h"
 #include <string>
 

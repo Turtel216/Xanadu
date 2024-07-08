@@ -1,3 +1,5 @@
+#pragma once
+
 #include "../Types/Token.h"
 #include <complex>
 #include <map>
