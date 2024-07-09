@@ -57,6 +57,8 @@ enum TokenType {
   _EOF
 };
 
+const std::string &token_to_string(const TokenType type) noexcept;
+
 class Token {
 private:
   const TokenType type;
