@@ -56,10 +56,10 @@ Token::Token(const TokenType _type, std::string _lexeme,
     : type(_type), lexeme(_lexeme), literal(_literal), line(_line) {}
 
 // Getters
-TokenType Token::getType() const noexcept { return type; }
-std::string Token::getLexeme() const noexcept { return lexeme; }
-OptionalLiteral Token::getLiteral() const noexcept { return literal; }
-int Token::getLine() const noexcept { return line; }
+inline TokenType Token::getType() const noexcept { return type; }
+inline std::string Token::getLexeme() const noexcept { return lexeme; }
+inline OptionalLiteral Token::getLiteral() const noexcept { return literal; }
+inline int Token::getLine() const noexcept { return line; }
 
 // Convert Token class to string
 std::string Token::to_string() const noexcept {

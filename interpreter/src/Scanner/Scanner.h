@@ -59,7 +59,7 @@ public:
   std::vector<xanadu::Tokens::Token> scanTokens() noexcept;
 
   // Getters
-  std::string getSource() const noexcept;
-  std::vector<xanadu::Tokens::Token> getTokens() const noexcept;
+  inline std::string getSource() const noexcept;
+  inline std::vector<xanadu::Tokens::Token> getTokens() const noexcept;
 };
 } // namespace xanadu

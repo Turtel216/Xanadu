@@ -31,12 +31,6 @@ Scanner::keywords_map Scanner::keywords = {
 // Scanner constructor
 Scanner::Scanner(const std::string &_source) noexcept : source(_source) {}
 
-// Getters
-std::string Scanner::getSource() const noexcept { return this->source; }
-std::vector<xanadu::Tokens::Token> Scanner::getTokens() const noexcept {
-  return this->tokens;
-}
-
 // Parse string for tokens
 std::vector<xanadu::Tokens::Token> Scanner::scanTokens() noexcept {
   while (!isAtEnd()) {
@@ -239,5 +233,11 @@ inline bool Scanner::isAlpha(char _char) const noexcept {
 // Check if character is alphanumeric
 inline bool Scanner::isAlphaNumeric(char _char) const noexcept {
   return isAlpha(_char) || isdigit(_char);
+}
+
+// Getters
+inline std::string Scanner::getSource() const noexcept { return this->source; }
+inline std::vector<xanadu::Tokens::Token> Scanner::getTokens() const noexcept {
+  return this->tokens;
 }
 } // namespace xanadu

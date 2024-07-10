@@ -72,10 +72,10 @@ public:
   Token() noexcept = delete;
 
   // Getters
-  TokenType getType() const noexcept;
-  std::string getLexeme() const noexcept;
-  OptionalLiteral getLiteral() const noexcept;
-  int getLine() const noexcept;
+  inline TokenType getType() const noexcept;
+  inline std::string getLexeme() const noexcept;
+  inline OptionalLiteral getLiteral() const noexcept;
+  inline int getLine() const noexcept;
 
   // Convert Token class to string
   std::string to_string() const noexcept;
