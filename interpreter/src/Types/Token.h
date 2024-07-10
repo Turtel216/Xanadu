@@ -67,11 +67,16 @@ private:
   const int line;
 
 public:
+  //
+  // Constructors
+  //
   Token(const TokenType _type, std::string _lexeme,
         xanadu::Types::OptionalLiteral _literal, int _line) noexcept;
   Token() noexcept = delete;
 
+  //
   // Getters
+  //
   inline TokenType getType() const noexcept;
   inline std::string getLexeme() const noexcept;
   inline OptionalLiteral getLiteral() const noexcept;

@@ -52,13 +52,18 @@ private:
   void identifier() noexcept;
 
 public:
+  //
+  // Constructores
+  //
   Scanner(const std::string &_source) noexcept;
   Scanner() noexcept = delete;
 
   // Parse string for tokens
   std::vector<xanadu::Tokens::Token> scanTokens() noexcept;
 
+  //
   // Getters
+  //
   inline std::string getSource() const noexcept;
   inline std::vector<xanadu::Tokens::Token> getTokens() const noexcept;
 };

@@ -50,20 +50,24 @@ const std::string &token_to_string(const TokenType type) noexcept {
   return lookUpTable.find(type)->second;
 }
 
-// Token constructor
-Token::Token(const TokenType _type, std::string _lexeme,
-             xanadu::Types::OptionalLiteral _literal, int _line) noexcept
-    : type(_type), lexeme(_lexeme), literal(_literal), line(_line) {}
-
-// Getters
-inline TokenType Token::getType() const noexcept { return type; }
-inline std::string Token::getLexeme() const noexcept { return lexeme; }
-inline OptionalLiteral Token::getLiteral() const noexcept { return literal; }
-inline int Token::getLine() const noexcept { return line; }
-
 // Convert Token class to string
 std::string Token::to_string() const noexcept {
   return token_to_string(type) + " " + lexeme + " " +
          xanadu::Types::getLiteralString(literal.value());
 }
+
+//
+// Constructors
+//
+Token::Token(const TokenType _type, std::string _lexeme,
+             xanadu::Types::OptionalLiteral _literal, int _line) noexcept
+    : type(_type), lexeme(_lexeme), literal(_literal), line(_line) {}
+
+//
+// Getters
+//
+inline TokenType Token::getType() const noexcept { return type; }
+inline std::string Token::getLexeme() const noexcept { return lexeme; }
+inline OptionalLiteral Token::getLiteral() const noexcept { return literal; }
+inline int Token::getLine() const noexcept { return line; }
 } // namespace xanadu::Tokens
