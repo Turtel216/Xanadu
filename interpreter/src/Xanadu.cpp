@@ -11,7 +11,7 @@ namespace xanadu {
 bool Xanadu::hadErr = false;
 
 // interprete given file
-int Xanadu::runFile(std::string file) noexcept {
+int Xanadu::runFile(const std::string &file) noexcept {
   std::string text;
   std::ifstream source_file(file);
 
@@ -48,7 +48,7 @@ void Xanadu::runPrompt() noexcept {
 }
 
 // runs the interpreter
-void Xanadu::run(std::string input) noexcept {
+void Xanadu::run(const std::string &input) noexcept {
   // vector holding tokens
   std::vector<std::string> tokens;
 
@@ -63,12 +63,13 @@ void Xanadu::run(std::string input) noexcept {
 }
 
 // throw an interpreter error
-void Xanadu::error(int line, std::string message) noexcept {
+void Xanadu::error(int line, const std::string &message) noexcept {
   Xanadu::report(line, "", message);
 }
 
 // display an interpreter error
-void Xanadu::report(int line, std::string where, std::string message) noexcept {
+void Xanadu::report(int line, const std::string &where,
+                    const std::string &message) noexcept {
   std::cout << "[line " << line << "] Error" << where << ": " << message
             << std::endl;
 

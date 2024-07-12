@@ -70,8 +70,8 @@ public:
   //
   // Constructors
   //
-  Token(const TokenType _type, std::string _lexeme,
-        xanadu::Types::OptionalLiteral _literal, int _line) noexcept;
+  Token(const TokenType _type, const std::string &_lexeme,
+        const xanadu::Types::OptionalLiteral &_literal, int _line) noexcept;
   Token() noexcept = delete;
 
   //
