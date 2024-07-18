@@ -1,6 +1,6 @@
 # Xanadu
 
-#### A simple interpreted programming language running on the JVM and with syntax based on Rush song lyrics and titles
+#### A simple interpreted esoteric programming language running on the JVM and with syntax based on Rush song lyrics and titles
 
 > [!WARNING]
 > The language is still under development and will probably undergo several changes before release. Keywords are most likely to change in the future
