@@ -77,10 +77,10 @@ public:
   //
   // Getters
   //
-  inline TokenType getType() const noexcept;
-  inline std::string getLexeme() const noexcept;
-  inline OptionalLiteral getLiteral() const noexcept;
-  inline int getLine() const noexcept;
+  inline TokenType getType() const noexcept { return type; }
+  inline std::string getLexeme() const noexcept { return lexeme; }
+  inline OptionalLiteral getLiteral() const noexcept { return literal; }
+  inline int getLine() const noexcept { return line; }
 
   // Convert Token class to string
   std::string to_string() const noexcept;

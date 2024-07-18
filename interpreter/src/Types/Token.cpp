@@ -62,12 +62,4 @@ std::string Token::to_string() const noexcept {
 Token::Token(const TokenType _type, const std::string &_lexeme,
              const xanadu::Types::OptionalLiteral &_literal, int _line) noexcept
     : type(_type), lexeme(_lexeme), literal(_literal), line(_line) {}
-
-//
-// Getters
-//
-inline TokenType Token::getType() const noexcept { return type; }
-inline std::string Token::getLexeme() const noexcept { return lexeme; }
-inline OptionalLiteral Token::getLiteral() const noexcept { return literal; }
-inline int Token::getLine() const noexcept { return line; }
 } // namespace xanadu::Tokens
