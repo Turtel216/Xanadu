@@ -2,6 +2,7 @@
 
 #include "../Ast/Expr.h"
 #include "../Types/Token.h"
+#include <memory>
 #include <vector>
 
 namespace xanadu {
@@ -11,8 +12,8 @@ private:
   const std::vector<xanadu::Tokens::Token> tokens;
   int current;
 
-  Expr expression();
-  Expr equality();
+  std::unique_ptr<Expr> expression();
+  std::unique_ptr<Expr> equality();
   bool match(xanadu::Tokens::TokenType types, ...);
   bool check(xanadu::Tokens::TokenType type);
   xanadu::Tokens::Token advance();
