@@ -1,5 +1,6 @@
 #pragma once
 
+#include "./Types/Token.h"
 #include <string>
 
 namespace xanadu {
@@ -14,6 +15,8 @@ public:
   static void run(const std::string &str) noexcept;
   // throw an interpreter error
   static void error(int line, const std::string &message) noexcept;
+  // throw an interpreter error
+  static void error(Tokens::Token token, const std::string &message) noexcept;
   // display an interpreter error
   static void report(int line, const std::string &where,
                      const std::string &message) noexcept;

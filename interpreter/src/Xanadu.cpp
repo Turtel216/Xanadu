@@ -1,4 +1,5 @@
 #include "Xanadu.h"
+#include "Types/Token.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -65,6 +66,14 @@ void Xanadu::run(const std::string &input) noexcept {
 // throw an interpreter error
 void Xanadu::error(int line, const std::string &message) noexcept {
   Xanadu::report(line, "", message);
+}
+
+// throw an interpreter error
+void Xanadu::error(Tokens::Token token, const std::string &message) noexcept {
+  if (token.getType() == Tokens::TokenType::_EOF)
+    report(token.getLine(), "at end", message);
+  else
+    report(token.getLine(), "at '" + token.getLexeme() + "'", message);
 }
 
 // display an interpreter error
