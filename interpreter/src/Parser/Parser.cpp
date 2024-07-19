@@ -96,7 +96,7 @@ std::unique_ptr<Expr> Parser::primary() noexcept {
   }
 }
 
-xanadu::Tokens::Token Parser::consume(xanadu::Tokens::TokenType type,
+xanadu::Tokens::Token Parser::consume(Tokens::TokenType type,
                                       const std::string &message) {
   if (check(type))
     return advance();
@@ -111,7 +111,7 @@ ParseErr Parser::error(Tokens::Token token,
   return ParseErr();
 }
 
-bool Parser::match(std::list<xanadu::Tokens::TokenType> types) {
+bool Parser::match(std::list<Tokens::TokenType> types) {
   for (auto type : types) {
     if (check(type)) {
       advance();
@@ -132,13 +132,13 @@ bool Parser::match(TokenType type) {
   return false;
 }
 
-bool Parser::check(xanadu::Tokens::TokenType type) {
+bool Parser::check(Tokens::TokenType type) {
   if (isAtEnd())
     return false;
   return peek().getType() == type;
 }
 
-xanadu::Tokens::Token Parser::advance() {
+Tokens::Token Parser::advance() {
   if (!isAtEnd())
     current++;
   return previous();
@@ -146,13 +146,13 @@ xanadu::Tokens::Token Parser::advance() {
 
 bool Parser::isAtEnd() { return peek().getType() == Tokens::_EOF; }
 
-xanadu::Tokens::Token Parser::peek() { return tokens.at(current); }
+Tokens::Token Parser::peek() { return tokens.at(current); }
 
-xanadu::Tokens::Token Parser::previous() { return tokens.at(current - 1); }
+Tokens::Token Parser::previous() { return tokens.at(current - 1); }
 
 //
 // Constructors
 //
-Parser::Parser(std::vector<xanadu::Tokens::Token> _tokens) noexcept
+Parser::Parser(std::vector<Tokens::Token> _tokens) noexcept
     : tokens(_tokens), current(0) {}
 } // namespace xanadu
