@@ -9,7 +9,10 @@
 
 namespace xanadu {
 
-class ParseErr : public std::runtime_error {};
+class ParseErr : public std::runtime_error {
+public:
+  ParseErr();
+};
 
 class Parser {
 private:
