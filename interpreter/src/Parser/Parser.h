@@ -42,5 +42,7 @@ public:
   // Constructors
   //
   Parser(std::vector<Tokens::Token> _tokens) noexcept;
+
+  std::unique_ptr<Expr> parse();
 };
 } // namespace xanadu

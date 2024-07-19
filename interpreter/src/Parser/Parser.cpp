@@ -15,6 +15,14 @@ namespace xanadu {
 //
 // Member functions
 //
+std::unique_ptr<Expr> Parser::parse() {
+  try {
+    return expression();
+  } catch (ParseErr err) {
+    return nullptr;
+  }
+}
+
 std::unique_ptr<Expr> Parser::expression() noexcept { return equality(); }
 
 std::unique_ptr<Expr> Parser::equality() noexcept {
