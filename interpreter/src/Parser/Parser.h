@@ -25,7 +25,7 @@ private:
   std::unique_ptr<Expr> term() noexcept;
   std::unique_ptr<Expr> factor() noexcept;
   std::unique_ptr<Expr> unary() noexcept;
-  std::unique_ptr<Expr> primary() noexcept;
+  std::unique_ptr<Expr> primary();
   Tokens::Token consume(Tokens::TokenType type, const std::string &message);
   ParseErr error(Tokens::Token token, const std::string &message) noexcept;
   bool match(std::list<Tokens::TokenType> types);

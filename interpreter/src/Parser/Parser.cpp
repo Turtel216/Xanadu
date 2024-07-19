@@ -78,7 +78,7 @@ std::unique_ptr<Expr> Parser::unary() noexcept {
   return primary();
 }
 
-std::unique_ptr<Expr> Parser::primary() noexcept {
+std::unique_ptr<Expr> Parser::primary() {
   if (match(FALSE))
     return std::unique_ptr<Expr>(new LiteralExpr(false));
   if (match(TRUE))
@@ -94,6 +94,8 @@ std::unique_ptr<Expr> Parser::primary() noexcept {
     consume(RIGHT_PAREN, "Expect ')' after expression.");
     return std::unique_ptr<Expr>(new GroupingExpr(expr.get()));
   }
+
+  throw error(peek(), "Expect expression");
 }
 
 xanadu::Tokens::Token Parser::consume(Tokens::TokenType type,
