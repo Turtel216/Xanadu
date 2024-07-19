@@ -90,11 +90,18 @@ std::unique_ptr<Expr> Parser::primary() noexcept {
 
   if (match(LEFT_PAREN)) {
     auto expr = expression();
-    consume(RIGHT_PAREN, "Expect ')' after expression."); // TODO
+    consume(RIGHT_PAREN, "Expect ')' after expression.");
     return std::unique_ptr<Expr>(new GroupingExpr(expr.get()));
   }
 }
 
+xanadu::Tokens::Token Parser::consume(xanadu::Tokens::TokenType type,
+                                      const std::string &message) {
+  if (check(type))
+    return advance();
+
+  throw error(peek(), message);
+}
 bool Parser::match(std::list<xanadu::Tokens::TokenType> types) {
   for (auto type : types) {
     if (check(type)) {

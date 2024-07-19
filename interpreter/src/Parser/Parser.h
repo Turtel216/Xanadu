@@ -21,6 +21,8 @@ private:
   std::unique_ptr<Expr> factor() noexcept;
   std::unique_ptr<Expr> unary() noexcept;
   std::unique_ptr<Expr> primary() noexcept;
+  xanadu::Tokens::Token consume(xanadu::Tokens::TokenType type,
+                                const std::string &message);
   bool match(std::list<xanadu::Tokens::TokenType> types);
   bool match(xanadu::Tokens::TokenType type);
   bool check(xanadu::Tokens::TokenType type);
