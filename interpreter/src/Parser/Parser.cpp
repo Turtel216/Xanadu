@@ -1,6 +1,7 @@
 #include "Parser.h"
 #include "../Ast/Expr.h"
 #include "../Types/Token.h"
+#include "../Xanadu.h"
 #include <list>
 #include <memory>
 
@@ -102,6 +103,14 @@ xanadu::Tokens::Token Parser::consume(xanadu::Tokens::TokenType type,
 
   throw error(peek(), message);
 }
+
+// TODO
+ParseErr Parser::error(Tokens::Token token,
+                       const std::string &message) noexcept {
+  Xanadu::error(token, message);
+  return ParseErr();
+}
+
 bool Parser::match(std::list<xanadu::Tokens::TokenType> types) {
   for (auto type : types) {
     if (check(type)) {
