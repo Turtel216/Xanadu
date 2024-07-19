@@ -107,6 +107,29 @@ xanadu::Tokens::Token Parser::consume(Tokens::TokenType type,
 }
 
 // TODO
+void Parser::synchronize() noexcept {
+  advance();
+
+  while (!isAtEnd()) {
+    if (previous().getType() == Tokens::TokenType::SEMICOLON)
+      return;
+
+    switch (peek().getType()) {
+    case Tokens::TokenType::CLASS:
+    case Tokens::TokenType::FUN:
+    case Tokens::TokenType::VAR:
+    case Tokens::TokenType::FOR:
+    case Tokens::TokenType::IF:
+    case Tokens::TokenType::WHILE:
+    case Tokens::TokenType::PRINT:
+    case Tokens::TokenType::RETURN:
+      return;
+    }
+
+    advance();
+  }
+}
+
 ParseErr Parser::error(Tokens::Token token,
                        const std::string &message) noexcept {
   Xanadu::error(token, message);
