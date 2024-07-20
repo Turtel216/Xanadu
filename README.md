@@ -53,7 +53,7 @@ Freewill(1 == 1) {
 Freewill(1 == 2) {
    blabla "I will choose free will"
 } Choose_not_to_decide {
-   blabla "You still made choice"
+   blabla "You still made a choice"
 }
 ```
 
