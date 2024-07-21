@@ -141,7 +141,7 @@ void Parser::synchronize() noexcept {
 ParseErr Parser::error(Tokens::Token token,
                        const std::string &message) noexcept {
   Xanadu::error(token, message);
-  return ParseErr();
+  return ParseErr("Don't know what to put here yet");
 }
 
 bool Parser::match(std::list<Tokens::TokenType> types) {
