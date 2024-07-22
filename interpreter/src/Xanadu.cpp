@@ -8,25 +8,34 @@
 
 namespace xanadu {
 
+const int ERROR_EXIT = 65;
+
 // instanciete bool variable
 bool Xanadu::hadErr = false;
 
 // interprete given file
 int Xanadu::runFile(const std::string &file) noexcept {
-  std::string text;
-  std::ifstream source_file(file);
+  const auto source = ([&]() -> std::string {
+    try {
+      std::ifstream in(file, std::ios::in);
+      in.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+      return std::string{std::istreambuf_iterator<char>{in},
+                         std::istreambuf_iterator<char>{}};
+    } catch (std::exception &e) {
+      std::cout << "Could'nt open file" << "\n";
+      return "";
+    }
+  })();
 
-  // read from file
-  while (std::getline(source_file, text))
-    continue;
-  source_file.close();
+  if (source.empty())
+    return ERROR_EXIT;
 
   // run interpreter on read text
-  run(text);
+  run(source);
 
   // an error had been encountered, exit program with error code 65
   if (hadErr)
-    return 65;
+    return ERROR_EXIT;
 
   return 0;
 }
