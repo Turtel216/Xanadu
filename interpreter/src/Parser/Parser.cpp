@@ -132,6 +132,8 @@ void Parser::synchronize() noexcept {
     case Tokens::TokenType::PRINT:
     case Tokens::TokenType::RETURN:
       return;
+    default:
+      return;
     }
 
     advance();

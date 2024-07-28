@@ -11,7 +11,7 @@ namespace xanadu {
 
 class ParseErr : public std::runtime_error {
 public:
-  ParseErr(const std::string &what) noexcept : std::runtime_error(what) {}
+  ParseErr(const std::string what) noexcept : std::runtime_error(what) {}
 };
 
 class Parser {

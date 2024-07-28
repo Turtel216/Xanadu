@@ -35,13 +35,15 @@ std::vector<xanadu::Tokens::Token> Scanner::scanTokens() noexcept {
     scanToken();
   }
 
-  tokens.push_back(Tokens::Token(Tokens::TokenType::_EOF, "", nullptr, line));
+  tokens.push_back(Tokens::Token(Tokens::TokenType::_EOF, "",
+                                 Types::makeOptionalLiteral(""), line));
   return tokens;
 }
 
 // Map chararcters to Token enums
 void Scanner::scanToken() noexcept {
-  char _char = advance();
+  char _char = peek();
+  advance();
   switch (_char) {
   case '(':
     addToken(LEFT_PAREN);
@@ -129,12 +131,12 @@ inline bool Scanner::isAtEnd() const noexcept {
 inline char Scanner::advance() noexcept { return source.at(current++); }
 // Add token enum to map
 inline void Scanner::addToken(Tokens::TokenType type) noexcept {
-  addToken(type, nullptr);
+  addToken(type, Types::makeOptionalLiteral(""));
 }
 // Add token enum to map
 void Scanner::addToken(Tokens::TokenType type,
                        Types::OptionalLiteral literal) noexcept {
-  std::string text = source.substr(start, current);
+  std::string text = source.substr(start, current - start);
   tokens.push_back(Tokens::Token(type, text, literal, line));
 }
 
