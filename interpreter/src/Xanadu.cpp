@@ -1,4 +1,6 @@
 #include "Xanadu.h"
+#include "Parser/Parser.h"
+#include "Scanner/Scanner.h"
 #include "Types/Token.h"
 #include <fstream>
 #include <iostream>
@@ -15,6 +17,7 @@ bool Xanadu::hadErr = false;
 
 // interprete given file
 int Xanadu::runFile(const std::string &file) noexcept {
+  // Read from file
   const auto source = ([&]() -> std::string {
     try {
       std::ifstream in(file, std::ios::in);
@@ -33,10 +36,11 @@ int Xanadu::runFile(const std::string &file) noexcept {
   // run interpreter on read text
   run(source);
 
-  // an error had been encountered, exit program with error code 65
+  // if an error had been encountered, exit the program with error code 65
   if (hadErr)
     return ERROR_EXIT;
 
+  // Exit program with code 0(success)
   return 0;
 }
 
@@ -61,16 +65,20 @@ void Xanadu::runPrompt() noexcept {
 //  runs the interpreter
 void Xanadu::run(const std::string &input) noexcept {
   // vector holding tokens
-  std::vector<std::string> tokens;
+  std::vector<Tokens::Token> tokens;
 
-  std::stringstream stream(input);
-  std::string intermediate;
-  // tokenizing input string based on space ' '
-  while (std::getline(stream, intermediate, ' '))
-    tokens.push_back(intermediate);
+  // Lexer
+  Scanner scanner(input);
+  // Call lexer
+  tokens = scanner.scanTokens();
 
-  for (auto token : tokens)
-    std::cout << token;
+  // Parser
+  Parser parser(tokens);
+  auto expression = parser.parse();
+
+  // Stop if there was a syntax error
+  if (hadErr)
+    return;
 }
 
 // throw an interpreter error
