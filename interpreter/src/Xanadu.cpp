@@ -46,18 +46,13 @@ int Xanadu::runFile(const std::string &file) noexcept {
 
 // run command prompt interpreter
 void Xanadu::runPrompt() noexcept {
-  std::string input = "";
+  std::string line = "";
 
   // read command prompt input from user
-  while (true) {
-    std::cout << "> ";
-    std::cin >> input;
-
+  while (std::cout << "> " && std::getline(std::cin, line)) {
     // interprete given command prompt
-    run(input);
+    run(line);
     hadErr = false;
-
-    std::cout << std::endl;
   }
 }
 
@@ -71,6 +66,9 @@ void Xanadu::run(const std::string &input) noexcept {
   Scanner scanner(input);
   // Call lexer
   tokens = scanner.scanTokens();
+
+  for (auto token : tokens)
+    std::cout << token.getLexeme() << "\n";
 
   // Parser
   Parser parser(tokens);
@@ -97,7 +95,7 @@ void Xanadu::error(Tokens::Token token, const std::string &message) noexcept {
 // display an interpreter error
 void Xanadu::report(int line, const std::string &where,
                     const std::string &message) noexcept {
-  std::cout << "[line " << line << "] Error" << where << ": " << message
+  std::cout << "[line " << line << "] Error " << where << ": " << message
             << std::endl;
 
   hadErr = true;

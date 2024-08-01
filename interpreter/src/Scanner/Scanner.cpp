@@ -1,6 +1,7 @@
 #include "Scanner.h"
 #include "../Xanadu.h"
 #include <cctype>
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -42,8 +43,8 @@ std::vector<xanadu::Tokens::Token> Scanner::scanTokens() noexcept {
 
 // Map chararcters to Token enums
 void Scanner::scanToken() noexcept {
-  char _char = peek();
-  advance();
+  char _char = advance();
+
   switch (_char) {
   case '(':
     addToken(LEFT_PAREN);
@@ -125,7 +126,7 @@ void Scanner::scanToken() noexcept {
 
 // Check if the end of the string is reached
 inline bool Scanner::isAtEnd() const noexcept {
-  return current >= source.length();
+  return current >= source.size();
 }
 // Continue to the next character
 inline char Scanner::advance() noexcept { return source.at(current++); }
@@ -153,18 +154,19 @@ bool Scanner::match(char expected) noexcept {
 
 // Check for number enum and add it to map
 void Scanner::number() noexcept {
-  while (isdigit(peek())) {
-    // check if factorial part
-    if (peek() == '.' && isdigit(peekNext())) {
-      advance();
+  while (isdigit(peek()))
+    advance();
 
-      while (isdigit(peek()))
-        advance();
-    }
+  // check if factorial part
+  if (peek() == '.' && isdigit(peekNext())) {
+    advance();
+
+    while (isdigit(peek()))
+      advance();
   }
 
   // Convert string to double and add to tokens
-  addToken(NUMBER, std::stod(source.substr(start, current)));
+  addToken(NUMBER, source.substr(start, current - start));
 }
 
 // look ahead and return next chararacter
@@ -176,7 +178,7 @@ char Scanner::peek() const noexcept {
 
 // look 2 chararacters ahead and return it
 char Scanner::peekNext() const noexcept {
-  if (current + 1 >= source.length())
+  if (current + 1 >= source.size())
     return '\n';
   return source.at(current + 1);
 }
