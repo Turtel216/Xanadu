@@ -62,4 +62,14 @@ std::string Token::to_string() const noexcept {
 Token::Token(const TokenType _type, const std::string &_lexeme,
              const xanadu::Types::OptionalLiteral &_literal, int _line) noexcept
     : type(_type), lexeme(_lexeme), literal(_literal), line(_line) {}
+
+//
+// Overloaded operators
+//
+
+// Mainly used for testing
+bool Token::operator==(Token lhs) const noexcept {
+  return this->line == lhs.getLine() && this->type == lhs.getType() &&
+         this->lexeme == lhs.getLexeme();
+}
 } // namespace xanadu::Tokens

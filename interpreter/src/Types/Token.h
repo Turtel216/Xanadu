@@ -84,5 +84,12 @@ public:
 
   // Convert Token class to string
   std::string to_string() const noexcept;
+
+  //
+  // Overloaded operators
+  //
+
+  // Mainly used for testing
+  bool operator==(Token lhs) const noexcept;
 };
 } // namespace xanadu::Tokens
