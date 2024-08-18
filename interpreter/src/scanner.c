@@ -142,6 +142,78 @@ static Token number()
 	return make_token(TOKEN_NUMBER);
 }
 
+static inline bool is_alpha(char c)
+{
+	return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_';
+}
+
+static TokenType check_keyword(int start, int length, const char *rest,
+			       TokenType type)
+{
+	if (scanner.current - scanner.start == start + length &&
+	    memcmp(scanner.start + start, rest, length) == 0) {
+		return type;
+	}
+
+	return TOKEN_IDENTIFIER;
+}
+
+//TODO add all identifiers
+static TokenType identifier_type()
+{
+	switch (scanner.start[0]) {
+	case 'a':
+		return check_keyword(1, 2, "nd", TOKEN_AND);
+	case 'O':
+		return check_keyword(1, 4, "vertune", TOKEN_CLASS);
+	case 'C':
+		return check_keyword(1, 3, "hoose_not_to_decide", TOKEN_ELSE);
+	case 'F':
+		return check_keyword(1, 1, "reewill", TOKEN_IF);
+	case 'c':
+		return check_keyword(1, 2, "ygnus", TOKEN_NIL);
+	case 'o':
+		if (scanner.current - scanner.start > 1) {
+			switch (scanner.start[1]) {
+			case 'a':
+				return check_keyword(1, 1, "r", TOKEN_OR);
+			case 'v':
+				return check_keyword(1, 4, "ertune",
+						     TOKEN_CLASS);
+			}
+		}
+		break;
+	case 'b':
+		return check_keyword(1, 4, "labla", TOKEN_PRINT);
+	case 'l':
+		return check_keyword(1, 5, "imelight", TOKEN_RETURN);
+	case 's':
+		return check_keyword(1, 4, "uper", TOKEN_SUPER);
+	case 'y':
+		return check_keyword(1, 2, "yz", TOKEN_VAR);
+	case 'W':
+		return check_keyword(1, 4, "orkingmans_grind", TOKEN_WHILE);
+	case 't':
+		if (scanner.current - scanner.start > 1) {
+			switch (scanner.start[1]) {
+			case 'h':
+				return check_keyword(2, 2, "is", TOKEN_THIS);
+			case 'r':
+				return check_keyword(2, 2, "ue", TOKEN_TRUE);
+			}
+		}
+		break;
+	}
+	return TOKEN_IDENTIFIER;
+}
+
+static Token identifier()
+{
+	while (is_alpha(peek()) || is_digit(peek()))
+		advance();
+	return make_token(identifier_type());
+}
+
 Token scan_token()
 {
 	skip_whitespace();
@@ -151,6 +223,9 @@ Token scan_token()
 		return make_token(TOKEN_EOF);
 
 	char c = advance();
+
+	if (is_alpha(c))
+		return identifier();
 	if (is_digit(c))
 		return number();
 
