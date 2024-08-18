@@ -2,6 +2,7 @@
 #include "common.h"
 #include "debug.h"
 #include "error.h"
+#include "compiler.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -90,18 +91,17 @@ static InterpretResult run()
 #undef BINARY_OP
 }
 
-InterpretResult interpret(Chunk *chunk)
+InterpretResult interpret(const char *source)
 {
-	vm.chunk = chunk;
-	vm.ip = vm.chunk->code;
-	return run();
+	compile(source);
+	return INTERPRET_OK;
 }
 
 static inline void grow_stack()
 {
 	vm.stack = realloc(vm.stack, vm.stack_size + STACK_MAX);
 	if (vm.stack == NULL)
-		error_msg_exit("Failed to reallocate stack");
+		error_msg_exit("Failed to grow stack");
 }
 
 void push(Value value)

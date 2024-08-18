@@ -1,8 +1,8 @@
 #ifndef xanadu_vm_h
 #define xanadu_vm_h
 
-#include "chunk.h"
 #include "value.h"
+#include "chunk.h"
 
 #define STACK_MAX 256
 
@@ -14,15 +14,9 @@ typedef struct {
 	int stack_size;
 } VM;
 
-typedef enum {
-	INTERPRET_OK,
-	INTERPRET_COMPILE_ERROR,
-	INTERPRET_RUNTIME_ERROR
-} InterpretResult;
-
 void init_vm();
 void free_vm();
-InterpretResult interpret(Chunk *chunk);
+InterpretResult interpret(const char *source);
 void push(Value value);
 Value pop();
 

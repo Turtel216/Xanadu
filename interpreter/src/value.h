@@ -11,9 +11,16 @@ typedef struct {
 	Value *values;
 } ValueArray;
 
+typedef enum {
+	INTERPRET_OK,
+	INTERPRET_COMPILE_ERROR,
+	INTERPRET_RUNTIME_ERROR
+} InterpretResult;
+
 void init_value_array(ValueArray *array);
 void write_value_array(ValueArray *array, Value value);
 void free_value_array(ValueArray *array);
 void print_value(Value value);
+InterpretResult interpret(const char *source);
 
 #endif
