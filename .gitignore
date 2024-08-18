@@ -32,3 +32,4 @@
 *.app
 
 /interpreter/build/
+/interpreter/debug/
