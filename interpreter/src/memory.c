@@ -1,6 +1,7 @@
 #include <stdlib.h>
 
 #include "memory.h"
+#include "error.h"
 
 void *reallocate(void *pointer, size_t oldSize, size_t newSize)
 {
@@ -11,7 +12,7 @@ void *reallocate(void *pointer, size_t oldSize, size_t newSize)
 
 	void *result = realloc(pointer, newSize);
 	if (result == NULL)
-		exit(1);
+		error_msg_exit("Failed to reallocate memory in %s", __FILE__);
 
 	return result;
 }
