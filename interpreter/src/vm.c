@@ -1,7 +1,10 @@
 #include "chunk.h"
 #include "common.h"
 #include "debug.h"
+#include "error.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 #include "vm.h"
 
 VM vm;
@@ -9,15 +12,22 @@ VM vm;
 static void reset_stack()
 {
 	vm.stackTop = vm.stack;
+	vm.stack_size = 0;
 }
 
 void init_vm()
 {
+	vm.stack = (Value *)malloc(sizeof(Value) * STACK_MAX);
+	if (vm.stack == NULL)
+		error_msg_exit(
+			"Failed to initialize stack, memory allocation failed");
+
 	reset_stack();
 }
 
-void free_vm()
+void inline free_vm()
 {
+	free(vm.stack);
 }
 
 static InterpretResult run()
@@ -34,7 +44,7 @@ static InterpretResult run()
 	for (;;) {
 #ifdef DEBUG_TRACE_EXECUTION
 		printf("          ");
-		for (Value *slot = vm.stack; slot < vm.stackTop; slot++) {
+		for (Value *slot = vm.stack; slot < vm.stackTop; ++slot) {
 			printf("[ ");
 			print_value(*slot);
 			printf(" ]");
@@ -87,14 +97,25 @@ InterpretResult interpret(Chunk *chunk)
 	return run();
 }
 
+static inline void grow_stack()
+{
+	vm.stack = realloc(vm.stack, vm.stack_size + STACK_MAX);
+	if (vm.stack == NULL)
+		error_msg_exit("Failed to reallocate stack");
+}
+
 void push(Value value)
 {
+	if (++vm.stack_size >= STACK_MAX)
+		grow_stack();
+
 	*vm.stackTop = value;
 	vm.stackTop++;
 }
 
 Value pop()
 {
-	vm.stackTop--;
+	--vm.stackTop;
+	--vm.stack_size;
 	return *vm.stackTop;
 }
