@@ -4,20 +4,27 @@
 #include "value.h"
 #include "chunk.h"
 
+// Initiale maximum stack size
 #define STACK_MAX 256
 
+// Virtual machine meta data
 typedef struct {
-	Chunk *chunk;
-	uint8_t *ip;
-	Value *stack;
-	Value *stackTop;
-	int stack_size;
+	Chunk *chunk; // Byte code chunk
+	uint8_t *ip; // Unique vm id
+	Value *stack; // Stack dynamic array pointer
+	Value *stackTop; // Stack's head pointer
+	int stack_size; // Stack size
 } VM;
 
+// Start up virtual machine
 void init_vm();
+// Close virtual machine and free up memory
 void free_vm();
+// Interpret given string
 InterpretResult interpret(const char *source);
+// Push onto VM stack
 void push(Value value);
+// Pop from VM stack
 Value pop();
 
 #endif

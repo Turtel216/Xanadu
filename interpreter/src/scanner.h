@@ -1,6 +1,7 @@
 #ifndef xanadu_scanner_h
 #define xanadu_scanner_h
 
+// Types of language tokens
 typedef enum {
 	// Single-character tokens.
 	TOKEN_LEFT_PAREN,
@@ -49,14 +50,17 @@ typedef enum {
 	TOKEN_EOF
 } TokenType;
 
+// Token's meta data
 typedef struct {
-	TokenType type;
-	const char *start;
-	int length;
-	int line;
+	TokenType type; // The type of language token
+	const char *start; // String containing token
+	int length; // The lenght of the string
+	int line; // Line number of token in source file
 } Token;
 
+// Start up scanner
 void init_scanner(const char *source);
+// Run scanner
 Token scan_token();
 
 #endif

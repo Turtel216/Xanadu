@@ -8,24 +8,31 @@ static char *read_file(const char *path);
 
 int main(int argc, char *argv[])
 {
+	// Start up virtual machine
 	init_vm();
 
+	// Check for given xanadu file
 	if (argc == 1) {
-		repl();
+		repl(); // run command line interpreter
 	} else if (argc == 2) {
-		run_file(argv[1]);
+		run_file(argv[1]); // run file interpreter
 	} else {
+		// Insufficient number of arguments, exit with error message
 		fprintf(stderr, "Usage: clox [path]\n");
 		exit(64);
 	}
 
+	// Close virtual machine
 	free_vm();
 	return EXIT_SUCCESS;
 }
 
+// Command line interpreter
 static void repl()
 {
+	// input buffer
 	char line[1024];
+	// input loop
 	for (;;) {
 		printf("> ");
 
@@ -34,22 +41,28 @@ static void repl()
 			break;
 		}
 
+		// intepreter input
 		interpret(line);
 	}
 }
 
+// File interpreter
 static void run_file(const char *path)
 {
+	// Read from file
 	char *source = read_file(path);
+	// interpret read input
 	InterpretResult result = interpret(source);
 	free(source);
 
+	// Exit on compile error
 	if (result == INTERPRET_COMPILE_ERROR)
 		exit(65);
 	if (result == INTERPRET_RUNTIME_ERROR)
 		exit(70);
 }
 
+// Read from given file
 static char *read_file(const char *path)
 {
 	FILE *file = fopen(path, "rb");
@@ -62,18 +75,21 @@ static char *read_file(const char *path)
 	size_t fileSize = ftell(file);
 	rewind(file);
 
+	// Allocate read buffer memory
 	char *buffer = (char *)malloc(fileSize + 1);
 	if (buffer == NULL) {
 		fprintf(stderr, "Not enough memory to read \"%s\".\n", path);
 		exit(74);
 	}
 
+	// Read from file
 	size_t bytesRead = fread(buffer, sizeof(char), fileSize, file);
 	if (bytesRead < fileSize) {
 		fprintf(stderr, "Could not read file \"%s\".\n", path);
 		exit(74);
 	}
 
+	// Append string termination character
 	buffer[bytesRead] = '\0';
 
 	fclose(file);

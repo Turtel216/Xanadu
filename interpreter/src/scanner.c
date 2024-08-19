@@ -1,29 +1,34 @@
-#include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
-#include "common.h"
 #include "scanner.h"
 
+// Lexer's meta data
 typedef struct {
-	const char *start;
-	const char *current;
-	int line;
+	const char *start; // Start position
+	const char *current; // Current position on string
+	int line; // line number in source file
 } Scanner;
 
+// Global scanner struct
 Scanner scanner;
 
+// Start up scanner
 void init_scanner(const char *source)
 {
+	// initialize scanner meta data
 	scanner.start = source;
 	scanner.current = source;
 	scanner.line = 1;
 }
 
+// Check if at the end of source string
 static inline bool is_at_end()
 {
 	return *scanner.current == '\0';
 }
 
+// Initialize and return a new Token struct
 static Token make_token(TokenType type)
 {
 	Token token;
@@ -34,6 +39,7 @@ static Token make_token(TokenType type)
 	return token;
 }
 
+// Initialize and return a new Token struct of type error
 static Token error_token(const char *message)
 {
 	Token token;
@@ -44,12 +50,14 @@ static Token error_token(const char *message)
 	return token;
 }
 
+// Get next character
 static char advance()
 {
 	scanner.current++;
 	return scanner.current[-1];
 }
 
+// Check if current char is the expected char
 static bool match(char expected)
 {
 	if (is_at_end())
@@ -62,19 +70,23 @@ static bool match(char expected)
 	return true;
 }
 
+// Get current char
 static char peek()
 {
 	return *scanner.current;
 }
 
+// Get next char
 static char peek_next()
 {
+	// if at end return string termination character
 	if (is_at_end())
 		return '\0';
 
 	return scanner.current[1];
 }
 
+// Skip all kinds of whitespace of source string
 static void skip_whitespace()
 {
 	for (;;) {
@@ -89,7 +101,7 @@ static void skip_whitespace()
 			scanner.line++;
 			advance();
 			break;
-		case '/':
+		case '/': // Comments
 			if (peek_next() == '/') {
 				// A comment goes until the end of the line.
 				while (peek() != '\n' && !is_at_end())
@@ -104,6 +116,7 @@ static void skip_whitespace()
 	}
 }
 
+// Get string type
 static Token string()
 {
 	while (peek() != '"' && !is_at_end()) {
@@ -120,11 +133,13 @@ static Token string()
 	return make_token(TOKEN_STRING);
 }
 
+// Check if character is a digit
 static bool is_digit(char c)
 {
 	return c >= '0' && c <= '9';
 }
 
+// Get number type
 static Token number()
 {
 	while (is_digit(peek()))
@@ -142,11 +157,13 @@ static Token number()
 	return make_token(TOKEN_NUMBER);
 }
 
+// Check if character is alphanumeric
 static inline bool is_alpha(char c)
 {
 	return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_';
 }
 
+// Check if current string is the rest of a keyword
 static TokenType check_keyword(int start, int length, const char *rest,
 			       TokenType type)
 {
@@ -214,6 +231,7 @@ static Token identifier()
 	return make_token(identifier_type());
 }
 
+// Run scanner
 Token scan_token()
 {
 	skip_whitespace();
