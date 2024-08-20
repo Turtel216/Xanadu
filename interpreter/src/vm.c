@@ -3,8 +3,11 @@
 #include "debug.h"
 #include "vm.h"
 #include "error.h"
+#include "object.h"
 #include "compiler.h"
+#include "memory.h"
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <time.h>
 #include <stdarg.h>
@@ -15,6 +18,8 @@ VM vm;
 static Value peek(int distance);
 static void runtime_error(const char *format, ...);
 static bool is_falsey(Value value);
+// Concatenate first 2 strings on the stack
+static void concatenate();
 //######################
 
 // Reset stack to initiale state
@@ -96,9 +101,20 @@ static InterpretResult run()
 			push(BOOL_VAL(values_equal(a, b)));
 			break;
 		}
-		case OP_ADD:
-			BINARY_OP(NUMBER_VAL, +);
+		case OP_ADD: {
+			if (IS_STRING(peek(0)) && IS_STRING(peek(1))) {
+				concatenate();
+			} else if (IS_NUMBER(peek(0)) && IS_NUMBER(peek(1))) {
+				double b = AS_NUMBER(pop());
+				double a = AS_NUMBER(pop());
+				push(NUMBER_VAL(a + b));
+			} else {
+				runtime_error(
+					"Operands must be two numbers or two strings.");
+				return INTERPRET_RUNTIME_ERROR;
+			}
 			break;
+		}
 		case OP_GREATER:
 			BINARY_OP(BOOL_VAL, >);
 			break;
@@ -186,6 +202,22 @@ InterpretResult interpret(const char *source)
 static bool is_falsey(Value value)
 {
 	return IS_NIL(value) || (IS_BOOL(value) && !AS_BOOL(value));
+}
+
+// Concatenate first 2 strings on the stack
+static void concatenate()
+{
+	ObjString *b = AS_STRING(pop());
+	ObjString *a = AS_STRING(pop());
+
+	int length = a->length + b->length;
+	char *chars = ALLOCATE(char, length + 1);
+	memcpy(chars, a->chars, a->length);
+	memcpy(chars + a->length, b->chars, b->length);
+	chars[length] = '\0';
+
+	ObjString *result = take_string(chars, length);
+	push(OBJ_VAL(result));
 }
 
 // Grow vm stack's size

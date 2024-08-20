@@ -38,5 +38,7 @@ static inline bool isObjType(Value value, ObjType type)
 
 ObjString *copy_string(const char *chars, int length);
 void print_object(Value value);
+// Create a string object
+ObjString *take_string(char *chars, int length);
 
 #endif

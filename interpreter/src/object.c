@@ -39,3 +39,9 @@ ObjString *copy_string(const char *chars, int length)
 	heap_chars[length] = '\0';
 	return allocate_string(heap_chars, length);
 }
+
+// Create a string object
+ObjString *take_string(char *chars, int length)
+{
+	return allocate_string(chars, length);
+}
