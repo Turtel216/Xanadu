@@ -12,20 +12,29 @@
 // Marcos for converting Xanadu values into C values
 #define AS_BOOL(value) ((value).as.boolean)
 #define AS_NUMBER(value) ((value).as.number)
+#define AS_OBJ(value) ((value).as.obj)
 //##################################################
 
 // Marcos for checking a values type
 #define IS_BOOL(value) ((value).type == VAL_BOOL)
 #define IS_NIL(value) ((value).type == VAL_NIL)
 #define IS_NUMBER(value) ((value).type == VAL_NUMBER)
+#define IS_OBJ(value) ((value).type == VAL_OBJ)
 //##################################
+
+// Macro for converting Object type to value type
+#define OBJ_VAL(object) ((Value){ VAL_OBJ, { .obj = (Obj *)object } })
 
 // The kind of type of a value
 typedef enum {
 	VAL_BOOL,
 	VAL_NIL,
 	VAL_NUMBER,
+	VAL_OBJ,
 } ValueType;
+
+typedef struct Obj Obj;
+typedef struct ObjString ObjString;
 
 // The information of a type
 typedef struct {
@@ -33,6 +42,7 @@ typedef struct {
 	union {
 		bool boolean;
 		double number;
+		Obj *obj;
 	} as;
 } Value;
 

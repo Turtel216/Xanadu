@@ -5,6 +5,7 @@
 #include "compiler.h"
 #include "scanner.h"
 #include "chunk.h"
+#include "object.h"
 
 #ifdef DEBUG_PRINT_CODE
 #include "debug.h"
@@ -59,6 +60,7 @@ static uint8_t make_constant(Value value);
 static void unary();
 static void grouping();
 static void binary();
+static void string();
 static void parse_precedence(Precedence precedence);
 static ParseRule *get_rule(TokenType type);
 static void literal();
@@ -180,6 +182,12 @@ static void number()
 	emit_constant(NUMBER_VAL(value));
 }
 
+static void string()
+{
+	emit_constant(OBJ_VAL(copy_string(parser.previous.start + 1,
+					  parser.previous.length - 2)));
+}
+
 static uint8_t make_constant(Value value)
 {
 	int constant = add_constant(current_chunk(), value);
@@ -235,7 +243,7 @@ ParseRule rules[] = {
 	[TOKEN_LESS] = { NULL, binary, PREC_COMPARISON },
 	[TOKEN_LESS_EQUAL] = { NULL, binary, PREC_COMPARISON },
 	[TOKEN_IDENTIFIER] = { NULL, NULL, PREC_NONE },
-	[TOKEN_STRING] = { NULL, NULL, PREC_NONE },
+	[TOKEN_STRING] = { string, NULL, PREC_NONE },
 	[TOKEN_NUMBER] = { number, NULL, PREC_NONE },
 	[TOKEN_AND] = { NULL, NULL, PREC_NONE },
 	[TOKEN_CLASS] = { NULL, NULL, PREC_NONE },
