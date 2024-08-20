@@ -21,6 +21,7 @@ typedef enum {
 // Object meta data struct
 struct Obj {
 	ObjType type; // Type of object
+	struct Obj *next; // Pointer to next object in object list
 };
 
 // Meta data for String object

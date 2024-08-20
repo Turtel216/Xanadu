@@ -14,7 +14,10 @@ typedef struct {
 	Value *stack; // Stack dynamic array pointer
 	Value *stackTop; // Stack's head pointer
 	int stack_size; // Stack size
+	Obj *objects; // Head of object list
 } VM;
+
+extern VM vm;
 
 // Start up virtual machine
 void init_vm();

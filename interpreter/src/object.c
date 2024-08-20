@@ -7,6 +7,7 @@
 #include "memory.h"
 #include "object.h"
 #include "value.h"
+#include "vm.h"
 
 void print_object(Value value)
 {
@@ -21,6 +22,8 @@ static Obj *allocate_object(size_t size, ObjType type)
 {
 	Obj *object = (Obj *)reallocate(NULL, 0, size);
 	object->type = type;
+	object->next = vm.objects;
+	vm.objects = object;
 	return object;
 }
 

@@ -40,11 +40,13 @@ void init_vm()
 
 	// Set stack head pointer and stack size
 	reset_stack();
+	vm.objects = NULL;
 }
 
 // Close virtual machine and free up memory
 void inline free_vm()
 {
+	free_objects();
 	free(vm.stack);
 }
 
