@@ -1,6 +1,6 @@
 # Xanadu
 
-#### A simple interpreted esoteric programming language running on the JVM and with syntax based on Rush song lyrics and titles
+#### A simple interpreted esoteric programming language with syntax based on Rush song lyrics and titles
 
 > [!WARNING]
 > The language is still under development and will probably undergo several changes before release. Keywords are most likely to change in the future
@@ -80,6 +80,6 @@ overtune Band
 }
 ```
 
-## The Xanadu Interpreter
+## Tooling
 
-The Tree-walk interpreter is implemented in the C++ programming language and produces byte code for the [Java virtual machine](https://docs.oracle.com/en/java/javase/22/vm/java-virtual-machine-technology-overview.html). Both the [lexer](https://en.wikipedia.org/wiki/Lexical_analysis) and the [parser](https://www.techopedia.com/definition/3854/parser) are implemented from scratch, no third party dependencies were used while building this project.
+- Code editor with syntax highlighting: [Heaven's Door](https://github.com/Turtel216/Heavens-Door)

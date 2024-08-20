@@ -175,7 +175,7 @@ static TokenType check_keyword(int start, int length, const char *rest,
 	return TOKEN_IDENTIFIER;
 }
 
-//TODO add all identifiers
+//TODO add all identifiers and fix start/length
 static TokenType identifier_type()
 {
 	switch (scanner.start[0]) {
@@ -188,7 +188,7 @@ static TokenType identifier_type()
 	case 'F':
 		return check_keyword(1, 1, "reewill", TOKEN_IF);
 	case 'c':
-		return check_keyword(1, 2, "ygnus", TOKEN_NIL);
+		return check_keyword(1, 5, "ygnus", TOKEN_NIL);
 	case 'o':
 		if (scanner.current - scanner.start > 1) {
 			switch (scanner.start[1]) {
