@@ -77,7 +77,7 @@ bool table_get_from_table(Table *table, ObjString *key, Value *value)
 }
 
 // Delete value from table
-bool table_delete_from_table(Table *table, ObjString *key)
+bool delete_from_table(Table *table, ObjString *key)
 {
 	if (table->count == 0)
 		return false;

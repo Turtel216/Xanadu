@@ -28,7 +28,7 @@ void table_add_all(Table *from, Table *to);
 // Get value from table
 bool table_get_from_table(Table *table, ObjString *key, Value *value);
 // Delete value from table
-bool table_delete_from_table(Table *table, ObjString *key);
+bool delete_from_table(Table *table, ObjString *key);
 // Find String object in hash table
 ObjString *table_find_string(Table *table, const char *chars, int length,
 			     uint32_t hash);

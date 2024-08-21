@@ -105,6 +105,16 @@ static InterpretResult run()
 		case OP_FALSE:
 			push(BOOL_VAL(false));
 			break;
+		case OP_SET_GLOBAL: {
+			ObjString *name = READ_STRING();
+			if (insert_into_table(&vm.globals, name, peek(0))) {
+				delete_from_table(&vm.globals, name);
+				runtime_error("Undefined variable '%s'.",
+					      name->chars);
+				return INTERPRET_RUNTIME_ERROR;
+			}
+			break;
+		}
 		case OP_EQUAL: {
 			Value b = pop();
 			Value a = pop();
