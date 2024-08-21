@@ -124,6 +124,31 @@ static void adjust_capacity(Table *table, int capacity)
 	table->capacity = capacity;
 }
 
+// Find String object in hash table
+ObjString *table_find_string(Table *table, const char *chars, int length,
+			     uint32_t hash)
+{
+	if (table->count == 0)
+		return NULL;
+
+	uint32_t index = hash % table->capacity;
+	for (;;) {
+		Entry *entry = &table->entries[index];
+		if (entry->key == NULL) {
+			// Stop if we find an empty non-tombstone entry.
+			if (IS_NIL(entry->value))
+				return NULL;
+		} else if (entry->key->length == length &&
+			   entry->key->hash == hash &&
+			   memcmp(entry->key->chars, chars, length) == 0) {
+			// We found it.
+			return entry->key;
+		}
+
+		index = (index + 1) % table->capacity;
+	}
+}
+
 // Add object into loopup table
 bool insert_into_table(Table *table, ObjString *key, Value value)
 {

@@ -20,7 +20,7 @@ typedef struct {
 // Initialise look up table
 void init_table(Table *table);
 // Free's used memory and resets table to initiale state
-void freeTable(Table *table);
+void free_table(Table *table);
 // Add object into loopup table
 bool insert_into_table(Table *table, ObjString *key, Value value);
 // Copy contents of one table into another
@@ -29,5 +29,8 @@ void table_add_all(Table *from, Table *to);
 bool table_get_from_table(Table *table, ObjString *key, Value *value);
 // Delete value from table
 bool table_delete_from_table(Table *table, ObjString *key);
+// Find String object in hash table
+ObjString *table_find_string(Table *table, const char *chars, int length,
+			     uint32_t hash);
 
 #endif

@@ -3,6 +3,7 @@
 #include "debug.h"
 #include "vm.h"
 #include "error.h"
+#include "lookup_table.h"
 #include "object.h"
 #include "compiler.h"
 #include "memory.h"
@@ -38,6 +39,8 @@ void init_vm()
 		error_msg_exit(
 			"Failed to initialize stack, memory allocation failed");
 
+	init_table(&vm.strings);
+
 	// Set stack head pointer and stack size
 	reset_stack();
 	vm.objects = NULL;
@@ -46,6 +49,7 @@ void init_vm()
 // Close virtual machine and free up memory
 void inline free_vm()
 {
+	free_table(&vm.strings);
 	free_objects();
 	free(vm.stack);
 }

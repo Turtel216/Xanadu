@@ -3,6 +3,7 @@
 
 #include "value.h"
 #include "chunk.h"
+#include "lookup_table.h"
 
 // Initiale maximum stack size
 #define STACK_MAX 256
@@ -14,6 +15,7 @@ typedef struct {
 	Value *stack; // Stack dynamic array pointer
 	Value *stackTop; // Stack's head pointer
 	int stack_size; // Stack size
+	Table strings; // Hash table
 	Obj *objects; // Head of object list
 } VM;
 

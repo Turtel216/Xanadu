@@ -9,6 +9,7 @@
 #include "object.h"
 #include "value.h"
 #include "vm.h"
+#include "lookup_table.h"
 
 void print_object(Value value)
 {
@@ -45,6 +46,9 @@ static ObjString *allocate_string(char *chars, int length, uint32_t hash)
 	string->length = length;
 	string->chars = chars;
 	string->hash = hash;
+
+	// Insert object into hash table
+	insert_into_table(&vm.strings, string, NIL_VAL);
 	return string;
 }
 
@@ -52,6 +56,11 @@ ObjString *copy_string(const char *chars, int length)
 {
 	// Calculate hash value
 	uint32_t hash = hash_string(chars, length);
+	ObjString *interned =
+		table_find_string(&vm.strings, chars, length, hash);
+
+	if (interned != NULL)
+		return interned;
 
 	// Alocate and copy memory
 	char *heap_chars = ALLOCATE(char, length + 1);
@@ -65,6 +74,13 @@ ObjString *take_string(char *chars, int length)
 {
 	// Calculate hash value
 	uint32_t hash = hash_string(chars, length);
+
+	ObjString *interned =
+		table_find_string(&vm.strings, chars, length, hash);
+	if (interned != NULL) {
+		FREE_ARRAY(char, chars, length + 1);
+		return interned;
+	}
 
 	return allocate_string(chars, length, hash);
 }
