@@ -69,6 +69,7 @@ static void statement();
 static bool check(TokenType type);
 static bool match(TokenType type);
 static void print_statement();
+static void expression_statement();
 //#####################
 
 bool compile(const char *source, Chunk *chunk)
@@ -371,7 +372,16 @@ static void statement()
 {
 	if (match(TOKEN_PRINT)) {
 		print_statement();
+	} else {
+		expression_statement();
 	}
+}
+
+static void expression_statement()
+{
+	expression();
+	consume(TOKEN_SEMICOLON, "Expect ';' after expression.");
+	emit_byte(OP_POP);
 }
 
 static void print_statement()
