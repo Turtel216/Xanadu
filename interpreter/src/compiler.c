@@ -64,6 +64,11 @@ static void string();
 static void parse_precedence(Precedence precedence);
 static ParseRule *get_rule(TokenType type);
 static void literal();
+static void declaration();
+static void statement();
+static bool check(TokenType type);
+static bool match(TokenType type);
+static void print_statement();
 //#####################
 
 bool compile(const char *source, Chunk *chunk)
@@ -76,8 +81,10 @@ bool compile(const char *source, Chunk *chunk)
 	parser.panic_mode = false;
 
 	advance();
-	expression();
-	consume(TOKEN_EOF, "Expect end of expression.");
+
+	while (!match(TOKEN_EOF)) {
+		declaration();
+	}
 
 	end_compiler();
 	return !parser.had_error;
@@ -340,6 +347,38 @@ static void consume(TokenType type, const char *message)
 	}
 
 	error_at_current(message);
+}
+
+static void declaration()
+{
+	statement();
+}
+
+static bool check(TokenType type)
+{
+	return parser.current.type == type;
+}
+
+static bool match(TokenType type)
+{
+	if (!check(type))
+		return false;
+	advance();
+	return true;
+}
+
+static void statement()
+{
+	if (match(TOKEN_PRINT)) {
+		print_statement();
+	}
+}
+
+static void print_statement()
+{
+	expression();
+	consume(TOKEN_SEMICOLON, "Expect ';' after value.");
+	emit_byte(OP_PRINT);
 }
 
 static inline Chunk *current_chunk()

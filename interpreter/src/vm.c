@@ -7,6 +7,7 @@
 #include "object.h"
 #include "compiler.h"
 #include "memory.h"
+#include "value.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -146,9 +147,13 @@ static InterpretResult run()
 			}
 			push(NUMBER_VAL(-AS_NUMBER(pop())));
 			break;
-		case OP_RETURN: {
+		case OP_PRINT: {
 			print_value(pop());
 			printf("\n");
+			break;
+		}
+		case OP_RETURN: {
+			// Exit interpretor
 			return INTERPRET_OK;
 		}
 		}

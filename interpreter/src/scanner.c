@@ -201,7 +201,7 @@ static TokenType identifier_type()
 		}
 		break;
 	case 'b':
-		return check_keyword(1, 4, "labla", TOKEN_PRINT);
+		return check_keyword(1, 5, "labla", TOKEN_PRINT);
 	case 'l':
 		return check_keyword(1, 5, "imelight", TOKEN_RETURN);
 	case 's':
