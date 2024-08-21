@@ -71,6 +71,12 @@ static bool match(TokenType type);
 static void print_statement();
 static void expression_statement();
 static void synchronize();
+static void var_declaration();
+static uint8_t parse_variable(const char *errorMessage);
+static uint8_t identifier_constant(Token *name);
+static void define_variable(uint8_t global);
+static void variable();
+static void named_variable(Token name);
 //#####################
 
 bool compile(const char *source, Chunk *chunk)
@@ -197,6 +203,11 @@ static void string()
 					  parser.previous.length - 2)));
 }
 
+static void variable()
+{
+	named_variable(parser.previous);
+}
+
 static uint8_t make_constant(Value value)
 {
 	int constant = add_constant(current_chunk(), value);
@@ -251,7 +262,7 @@ ParseRule rules[] = {
 	[TOKEN_GREATER_EQUAL] = { NULL, binary, PREC_COMPARISON },
 	[TOKEN_LESS] = { NULL, binary, PREC_COMPARISON },
 	[TOKEN_LESS_EQUAL] = { NULL, binary, PREC_COMPARISON },
-	[TOKEN_IDENTIFIER] = { NULL, NULL, PREC_NONE },
+	[TOKEN_IDENTIFIER] = { variable, NULL, PREC_NONE },
 	[TOKEN_STRING] = { string, NULL, PREC_NONE },
 	[TOKEN_NUMBER] = { number, NULL, PREC_NONE },
 	[TOKEN_AND] = { NULL, NULL, PREC_NONE },
@@ -353,10 +364,50 @@ static void consume(TokenType type, const char *message)
 
 static void declaration()
 {
-	statement();
+	if (match(TOKEN_VAR)) {
+		var_declaration();
+	} else {
+		statement();
+	}
 
 	if (parser.panic_mode)
 		synchronize();
+}
+
+static void define_variable(uint8_t global)
+{
+	emit_bytes(OP_DEFINE_GLOBAL, global);
+}
+
+static uint8_t parse_variable(const char *errorMessage)
+{
+	consume(TOKEN_IDENTIFIER, errorMessage);
+	return identifier_constant(&parser.previous);
+}
+
+static void var_declaration()
+{
+	uint8_t global = parse_variable("Expect variable name.");
+
+	if (match(TOKEN_EQUAL)) {
+		expression();
+	} else {
+		emit_byte(OP_NIL);
+	}
+	consume(TOKEN_SEMICOLON, "Expect ';' after variable declaration.");
+
+	define_variable(global);
+}
+
+static uint8_t identifier_constant(Token *name)
+{
+	return make_constant(OBJ_VAL(copy_string(name->start, name->length)));
+}
+
+static void named_variable(Token name)
+{
+	uint8_t arg = identifier_constant(&name);
+	emit_bytes(OP_GET_GLOBAL, arg);
 }
 
 static void synchronize()

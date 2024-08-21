@@ -16,6 +16,7 @@ typedef struct {
 	Value *stackTop; // Stack's head pointer
 	int stack_size; // Stack size
 	Table strings; // Hash table
+	Table globals;
 	Obj *objects; // Head of object list
 } VM;
 

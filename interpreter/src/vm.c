@@ -41,6 +41,7 @@ void init_vm()
 			"Failed to initialize stack, memory allocation failed");
 
 	init_table(&vm.strings);
+	init_table(&vm.globals);
 
 	// Set stack head pointer and stack size
 	reset_stack();
@@ -51,6 +52,7 @@ void init_vm()
 void inline free_vm()
 {
 	free_table(&vm.strings);
+	free_table(&vm.globals);
 	free_objects();
 	free(vm.stack);
 }
@@ -61,6 +63,7 @@ static InterpretResult run()
 // marcos for vm instruction execution
 #define READ_BYTE() (*vm.ip++)
 #define READ_CONSTANT() (vm.chunk->constants.values[READ_BYTE()])
+#define READ_STRING() AS_STRING(READ_CONSTANT())
 #define BINARY_OP(valueType, op)                                    \
 	do {                                                        \
 		if (!IS_NUMBER(peek(0)) || !IS_NUMBER(peek(1))) {   \
@@ -152,9 +155,26 @@ static InterpretResult run()
 			printf("\n");
 			break;
 		}
+		case OP_GET_GLOBAL: {
+			ObjString *name = READ_STRING();
+			Value value;
+			if (!table_get_from_table(&vm.globals, name, &value)) {
+				runtime_error("Undefined variable '%s'.",
+					      name->chars);
+				return INTERPRET_RUNTIME_ERROR;
+			}
+			push(value);
+			break;
+		}
 		case OP_POP:
 			pop();
 			break;
+		case OP_DEFINE_GLOBAL: {
+			ObjString *name = READ_STRING();
+			insert_into_table(&vm.globals, name, peek(0));
+			pop();
+			break;
+		}
 		case OP_RETURN: {
 			// Exit interpretor
 			return INTERPRET_OK;
@@ -164,6 +184,7 @@ static InterpretResult run()
 
 #undef READ_BYTE
 #undef READ_CONSTANT
+#undef READ_STRING
 #undef BINARY_OP
 }
 
