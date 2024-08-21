@@ -29,6 +29,7 @@ struct ObjString {
 	Obj obj; // Object data
 	int length; // String length
 	char *chars; // String character array
+	uint32_t hash; // Hash value
 };
 
 // Returns true value is of the given object type
