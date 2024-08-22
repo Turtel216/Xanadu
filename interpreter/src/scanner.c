@@ -183,12 +183,19 @@ static TokenType identifier_type()
 		return check_keyword(1, 2, "nd", TOKEN_AND);
 	case 'O':
 		return check_keyword(1, 4, "vertune", TOKEN_CLASS);
-	case 'C':
-		return check_keyword(1, 3, "hoose_not_to_decide", TOKEN_ELSE);
 	case 'f':
 		return check_keyword(1, 7, "reewill", TOKEN_IF);
 	case 'c':
-		return check_keyword(1, 5, "ygnus", TOKEN_NIL);
+		if (scanner.current - scanner.start > 1) {
+			switch (scanner.start[1]) {
+			case 'y':
+				return check_keyword(1, 4, "gnus", TOKEN_NIL);
+			case 'o':
+				return check_keyword(1, 10, "unterpoint",
+						     TOKEN_ELSE);
+			}
+		}
+		break;
 	case 'o':
 		if (scanner.current - scanner.start > 1) {
 			switch (scanner.start[1]) {
@@ -208,7 +215,7 @@ static TokenType identifier_type()
 		return check_keyword(1, 4, "uper", TOKEN_SUPER);
 	case 'y':
 		return check_keyword(1, 2, "yz", TOKEN_VAR);
-	case 'W':
+	case 'w':
 		return check_keyword(1, 16, "orkingmans_grind", TOKEN_WHILE);
 	case 't':
 		if (scanner.current - scanner.start > 1) {

@@ -12,7 +12,7 @@
 The **yyz** keyword is used for declaring variables.
 
 ```ruby
-yyz name = "Xanadu"
+yyz name = "Xanadu";
 ```
 
 ### Writting to the console
@@ -20,16 +20,16 @@ yyz name = "Xanadu"
 To write to the console use the **blabla** keyword 
 
 ```ruby
-blabla "Piece"
+blabla "Piece";
 ```
 
 ### Control flow
 
-**while** loops are declared using the **Workingmans_grind** keyword 
+**while** loops are declared using the **workingmans_grind** keyword 
 
 ```ruby
-Workingmans_grind(true) {
-   blabla "Rush rocks!"
+workingmans_grind(true) {
+   blabla "Rush rocks!";
 }
 ```
 
@@ -39,21 +39,21 @@ Workingmans_grind(true) {
 circumstances()
 ```
 
-**if** statements are declared using the **Freewill** keyword
+**if** statements are declared using the **freewill** keyword
 
 ```ruby
-Freewill(1 == 1) {
-    blabla "I will choose free will"
+freewill(1 == 1) {
+    blabla "I will choose free will";
 }
 ```
 
-**else** statements are declaed using the **Choose_not_to_decide** keyword 
+**else** statements are declaed using the **counterpoint** keyword 
 
 ```ruby
-Freewill(1 == 2) {
-   blabla "I will choose free will"
-} Choose_not_to_decide {
-   blabla "You still made a choice"
+freewill(1 == 2) {
+   blabla "I will choose free will";
+} counterpoint {
+   blabla "You still made a choice";
 }
 ```
 
