@@ -189,10 +189,13 @@ static TokenType identifier_type()
 		if (scanner.current - scanner.start > 1) {
 			switch (scanner.start[1]) {
 			case 'y':
-				return check_keyword(1, 4, "gnus", TOKEN_NIL);
+				return check_keyword(2, 4, "gnus", TOKEN_NIL);
 			case 'o':
-				return check_keyword(1, 10, "unterpoint",
+				return check_keyword(2, 10, "unterpoint",
 						     TOKEN_ELSE);
+			case 'i':
+				return check_keyword(2, 11, "rcumstances",
+						     TOKEN_FOR);
 			}
 		}
 		break;

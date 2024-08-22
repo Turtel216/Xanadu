@@ -70,7 +70,7 @@ static Chunk *current_chunk();
 static void end_compiler();
 static void emit_return();
 static void emit_bytes(uint8_t byte1, uint8_t byte2);
-static void emitLoop(int loopStart);
+static void emit_loop(int loopStart);
 static int emit_jump(uint8_t instruction);
 static void emit_constant(Value value);
 static void patch_jump(int offset);
@@ -95,6 +95,7 @@ static void print_statement();
 static void expression_statement();
 static void if_statement();
 static void while_statement();
+static void for_statement();
 static void synchronize();
 static void var_declaration();
 static uint8_t parse_variable(const char *errorMessage);
@@ -678,6 +679,8 @@ static void statement()
 		end_scope();
 	} else if (match(TOKEN_IF)) {
 		if_statement();
+	} else if (match(TOKEN_FOR)) {
+		for_statement();
 	} else if (match(TOKEN_WHILE)) {
 		while_statement();
 	} else {
@@ -690,6 +693,58 @@ static void expression_statement()
 	expression();
 	consume(TOKEN_SEMICOLON, "Expect ';' after expression.");
 	emit_byte(OP_POP);
+}
+
+static void for_statement()
+{
+	begin_scope();
+
+	consume(TOKEN_LEFT_PAREN, "Expect '(' after 'for'.");
+
+	// Initializer clause
+	if (match(TOKEN_SEMICOLON)) {
+		// No initializer.
+	} else if (match(TOKEN_VAR)) {
+		var_declaration();
+	} else {
+		expression_statement();
+	}
+
+	int loopStart = current_chunk()->count;
+
+	// Condition clause
+	int exitJump = -1;
+	if (!match(TOKEN_SEMICOLON)) {
+		expression();
+		consume(TOKEN_SEMICOLON, "Expect ';' after loop condition.");
+
+		// Jump out of the loop if the condition is false.
+		exitJump = emit_jump(OP_JUMP_IF_FALSE);
+		emit_byte(OP_POP); // Condition.
+	}
+
+	// Increment clause
+	if (!match(TOKEN_RIGHT_PAREN)) {
+		int bodyJump = emit_jump(OP_JUMP);
+		int incrementStart = current_chunk()->count;
+		expression();
+		emit_byte(OP_POP);
+		consume(TOKEN_RIGHT_PAREN, "Expect ')' after for clauses.");
+
+		emit_loop(loopStart);
+		loopStart = incrementStart;
+		patch_jump(bodyJump);
+	}
+
+	statement();
+	emit_loop(loopStart);
+
+	if (exitJump != -1) {
+		patch_jump(exitJump);
+		emit_byte(OP_POP); // Condition.
+	}
+
+	end_scope();
 }
 
 static void if_statement()
