@@ -209,7 +209,7 @@ static TokenType identifier_type()
 	case 'y':
 		return check_keyword(1, 2, "yz", TOKEN_VAR);
 	case 'W':
-		return check_keyword(1, 4, "orkingmans_grind", TOKEN_WHILE);
+		return check_keyword(1, 16, "orkingmans_grind", TOKEN_WHILE);
 	case 't':
 		if (scanner.current - scanner.start > 1) {
 			switch (scanner.start[1]) {
