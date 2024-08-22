@@ -40,7 +40,21 @@ typedef struct {
 	Precedence precedence;
 } ParseRule;
 
+// Holds information of local variables
+typedef struct {
+	Token name; // Variable name
+	int depth; // Variable scope
+} Local;
+
+// Keep track of compiler state
+typedef struct {
+	Local locals[UINT8_COUNT]; // Array of local variables
+	int localCount; // Count of local variables
+	int scopeDepth; // Keeps track of scope level
+} Compiler;
+
 Parser parser;
+Compiler *current;
 Chunk *compiling_chunk;
 
 // Function definitions
@@ -66,6 +80,9 @@ static ParseRule *get_rule(TokenType type);
 static void literal(bool can_assign);
 static void declaration();
 static void statement();
+static void block();
+static void begin_scope();
+static void end_scope();
 static bool check(TokenType type);
 static bool match(TokenType type);
 static void print_statement();
@@ -77,11 +94,24 @@ static uint8_t identifier_constant(Token *name);
 static void define_variable(uint8_t global);
 static void variable(bool can_assign);
 static void named_variable(Token name, bool can_assign);
+static void init_compiler(Compiler *compiler);
 //#####################
+
+// Initialise compiler
+static void init_compiler(Compiler *compiler)
+{
+	compiler->localCount = 0;
+	compiler->scopeDepth = 0;
+	current = compiler;
+}
 
 bool compile(const char *source, Chunk *chunk)
 {
 	init_scanner(source);
+
+	// Initialise compiler
+	Compiler compiler;
+	init_compiler(&compiler);
 
 	compiling_chunk = chunk;
 
@@ -458,10 +488,36 @@ static bool match(TokenType type)
 	return true;
 }
 
+// Define new block
+static void block()
+{
+	while (!check(TOKEN_RIGHT_BRACE) && !check(TOKEN_EOF)) {
+		declaration();
+	}
+
+	consume(TOKEN_RIGHT_BRACE, "Expect '}' after block.");
+}
+
+// Enter new scope level
+static void begin_scope()
+{
+	current->scopeDepth++;
+}
+
+// Exit new scope level
+static void end_scope()
+{
+	current->scopeDepth--;
+}
+
 static void statement()
 {
 	if (match(TOKEN_PRINT)) {
 		print_statement();
+	} else if (match(TOKEN_LEFT_BRACE)) {
+		begin_scope();
+		block();
+		end_scope();
 	} else {
 		expression_statement();
 	}
