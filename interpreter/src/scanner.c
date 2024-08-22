@@ -185,8 +185,8 @@ static TokenType identifier_type()
 		return check_keyword(1, 4, "vertune", TOKEN_CLASS);
 	case 'C':
 		return check_keyword(1, 3, "hoose_not_to_decide", TOKEN_ELSE);
-	case 'F':
-		return check_keyword(1, 1, "reewill", TOKEN_IF);
+	case 'f':
+		return check_keyword(1, 7, "reewill", TOKEN_IF);
 	case 'c':
 		return check_keyword(1, 5, "ygnus", TOKEN_NIL);
 	case 'o':
