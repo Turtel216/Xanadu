@@ -87,7 +87,7 @@ overtune Band
 ### Arithmetic Operators 
 
 | Symbol  | | Operator | | Syntax |
-| ------- | |----------| |--------|
+| :---:   | |  :---:   | | :---:  |
 |   +     | |  Plus    | | a + b  |
 |   -     | |  Minus   | | a - b  |
 |   *     | | Multiply | | a * b  |
@@ -96,7 +96,7 @@ overtune Band
 ### Relational Operators
 
 | Symbol  | | Operator | | Syntax |
-| ------- | |----------| |--------|
+| :---:   | |  :---:   | | :---:  |
 |   <     | |  Less then    | | a < b  |
 |   >     | |  Greater then   | | a > b  |
 |   <=    | | Less then or equal to | | a <= b  |
@@ -107,7 +107,7 @@ overtune Band
 ### Logical Operators
 
 | Symbol  | | Operator | | Syntax |
-| ------- | |----------| |--------|
+| :---:   | |  :---:   | | :---:  |
 |   and     | |  Logical AND    | | a and b  |
 |   or     | |  Lpgical OR   | | a or b |
 |   !     | | Logical NOT | | !a  |
@@ -115,7 +115,7 @@ overtune Band
 ### Assignment Operators
 
 | Symbol  | | Operator | | Syntax |
-| ------- | |----------| |--------|
+| :---:   | |  :---:   | | :---:  |
 |   =     | |  Simple Assignment    | | a = b  |
 
 ## Tooling
