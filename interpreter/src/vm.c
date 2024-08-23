@@ -28,7 +28,7 @@ static void concatenate();
 static void reset_stack()
 {
 	vm.stackTop = vm.stack;
-	vm.stack_size = 0;
+	//vm.stack_size = 0;
 }
 
 // Start up virtual machine
@@ -293,6 +293,7 @@ static void concatenate()
 	push(OBJ_VAL(result));
 }
 
+/*
 // Grow vm stack's size
 static inline void grow_stack()
 {
@@ -301,13 +302,12 @@ static inline void grow_stack()
 	if (vm.stack == NULL)
 		error_msg_exit("Failed to grow stack");
 }
+TODO
+*/
 
 // Push onto VM stack
 void push(Value value)
 {
-	if (++vm.stack_size >= STACK_MAX)
-		grow_stack();
-
 	*vm.stackTop = value;
 	vm.stackTop++;
 }
