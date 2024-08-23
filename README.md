@@ -7,7 +7,7 @@
 
 ## Syntax
 
-Xanadu is a dynamically typed language. Each statement has to end with semicolone **;**
+Xanadu is a dynamically typed language. Each statement has to end with a semicolone ( ; ).
 
 ### Variables
 
@@ -91,7 +91,7 @@ overtune Band
  |   +      |  Plus     | a + b  |
  |   -      |  Minus    | a - b  |
  |   *      | Multiply  | a * b  |
- |   /      |  Dvide    | a / b  |
+ |   /      |  Divide    | a / b  |
 
 ### Relational Operators
 
@@ -109,7 +109,7 @@ overtune Band
  | Symbol  |  Operator  | Syntax |
  | :---:   |   :---:    | :---:  |
  |   and      |  Logical AND     | a and b  |
- |   or      |  Lpgical OR   |  a or b |
+ |   or      |  Logical OR   |  a or b |
  |   !      | Logical NOT |  !a  |
 
 ### Assignment Operators
