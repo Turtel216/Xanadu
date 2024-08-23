@@ -137,15 +137,13 @@ static void init_compiler(Compiler *compiler, FunctionType type)
 	local->name.length = 0;
 }
 
-ObjFunction *compile(const char *source, Chunk *chunk)
+ObjFunction *compile(const char *source)
 {
 	init_scanner(source);
 
 	// Initialise compiler
 	Compiler compiler;
 	init_compiler(&compiler, TYPE_SCRIPT);
-
-	compiling_chunk = chunk;
 
 	parser.had_error = false;
 	parser.panic_mode = false;

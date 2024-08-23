@@ -3,10 +3,18 @@
 
 #include "value.h"
 #include "chunk.h"
+#include "object.h"
 #include "lookup_table.h"
 
 // Initiale maximum stack size
-#define STACK_MAX 256
+#define FRAMES_MAX 64
+#define STACK_MAX (FRAMES_MAX * UINT8_COUNT)
+
+typedef struct {
+	ObjFunction *function;
+	uint8_t *ip;
+	Value *slots;
+} CallFrame;
 
 // Virtual machine meta data
 typedef struct {
@@ -14,7 +22,8 @@ typedef struct {
 	uint8_t *ip; // Unique vm id
 	Value *stack; // Stack dynamic array pointer
 	Value *stackTop; // Stack's head pointer
-	int stack_size; // Stack size
+	CallFrame frames[FRAMES_MAX];
+	int frameCount;
 	Table strings; // Hash table
 	Table globals;
 	Obj *objects; // Head of object list
