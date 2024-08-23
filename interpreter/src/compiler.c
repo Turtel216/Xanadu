@@ -47,16 +47,26 @@ typedef struct {
 	int depth; // Variable scope
 } Local;
 
+// Enum tracking types of functions
+typedef enum { TYPE_FUNCTION, TYPE_SCRIPT } FunctionType;
+
 // Keep track of compiler state
 typedef struct {
 	Local locals[UINT8_COUNT]; // Array of local variables
 	int localCount; // Count of local variables
 	int scopeDepth; // Keeps track of scope level
+	ObjFunction *function; // Function call stack
+	FunctionType type; // Function type
 } Compiler;
 
 Parser parser;
 Compiler *current;
 Chunk *compiling_chunk;
+
+static inline Chunk *current_chunk()
+{
+	return &current->function->chunk;
+}
 
 // Function definitions
 static void advance();
@@ -67,7 +77,7 @@ static void consume(TokenType type, const char *message);
 static void expression();
 static void emit_byte(uint8_t byte);
 static Chunk *current_chunk();
-static void end_compiler();
+static ObjFunction *end_compiler();
 static void emit_return();
 static void emit_bytes(uint8_t byte1, uint8_t byte2);
 static void emit_loop(int loopStart);
@@ -106,26 +116,34 @@ static void define_variable(uint8_t global);
 static void declare_variable();
 static void variable(bool can_assign);
 static void named_variable(Token name, bool can_assign);
-static void init_compiler(Compiler *compiler);
+static void init_compiler(Compiler *compiler, FunctionType type);
 static void and_(bool can_assign);
 static void or_(bool can_assign);
 //#####################
 
 // Initialise compiler
-static void init_compiler(Compiler *compiler)
+static void init_compiler(Compiler *compiler, FunctionType type)
 {
+	compiler->function = NULL;
+	compiler->type = type;
 	compiler->localCount = 0;
 	compiler->scopeDepth = 0;
+	compiler->function = new_function();
 	current = compiler;
+
+	Local *local = &current->locals[current->localCount++];
+	local->depth = 0;
+	local->name.start = "";
+	local->name.length = 0;
 }
 
-bool compile(const char *source, Chunk *chunk)
+ObjFunction *compile(const char *source, Chunk *chunk)
 {
 	init_scanner(source);
 
 	// Initialise compiler
 	Compiler compiler;
-	init_compiler(&compiler);
+	init_compiler(&compiler, TYPE_SCRIPT);
 
 	compiling_chunk = chunk;
 
@@ -138,8 +156,8 @@ bool compile(const char *source, Chunk *chunk)
 		declaration();
 	}
 
-	end_compiler();
-	return !parser.had_error;
+	ObjFunction *function = end_compiler();
+	return parser.had_error ? NULL : function;
 }
 
 static void expression()
@@ -147,14 +165,21 @@ static void expression()
 	parse_precedence(PREC_ASSIGNMENT);
 }
 
-static void end_compiler()
+static ObjFunction *end_compiler()
 {
 	emit_return();
+	ObjFunction *function = current->function;
+
 #ifdef DEBUG_PRINT_CODE
 	if (!parser.had_error) {
-		disassemble_chunk(current_chunk(), "code");
+		disassemble_chunk(current_chunk(),
+				  function->name != NULL ?
+					  function->name->chars :
+					  "<script>");
 	}
 #endif
+
+	return function;
 }
 
 static void binary(bool can_assign)
@@ -793,11 +818,6 @@ static void while_statement()
 
 	patch_jump(exitJump);
 	emit_byte(OP_POP);
-}
-
-static inline Chunk *current_chunk()
-{
-	return compiling_chunk;
 }
 
 static void emit_byte(uint8_t byte)

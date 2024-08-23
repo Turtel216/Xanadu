@@ -14,6 +14,10 @@
 // Print function types to console
 static void print_function(ObjFunction *function)
 {
+	if (function->name == NULL) {
+		printf("<script>");
+		return;
+	}
 	printf("<fn %s>", function->name->chars);
 }
 
