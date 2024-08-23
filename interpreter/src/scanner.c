@@ -215,7 +215,7 @@ static TokenType identifier_type()
 	case 'l':
 		return check_keyword(1, 5, "imelight", TOKEN_RETURN);
 	case 's':
-		return check_keyword(1, 4, "uper", TOKEN_SUPER);
+		return check_keyword(1, 10, "ubdivision", TOKEN_FUN);
 	case 'y':
 		return check_keyword(1, 2, "yz", TOKEN_VAR);
 	case 'w':
