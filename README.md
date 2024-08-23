@@ -86,37 +86,37 @@ overtune Band
 
 ### Arithmetic Operators 
 
-| Symbol  | | Operator | | Syntax |
-| :---:   | |  :---:   | | :---:  |
-|   +     | |  Plus    | | a + b  |
-|   -     | |  Minus   | | a - b  |
-|   *     | | Multiply | | a * b  |
-|   /     | |  Dvide   | | a / b  |
+ | Symbol   | Operator  | Syntax |
+ | :---:    |  :---:    | :---:  |
+ |   +      |  Plus     | a + b  |
+ |   -      |  Minus    | a - b  |
+ |   *      | Multiply  | a * b  |
+ |   /      |  Dvide    | a / b  |
 
 ### Relational Operators
 
-| Symbol  | | Operator | | Syntax |
-| :---:   | |  :---:   | | :---:  |
-|   <     | |  Less then    | | a < b  |
-|   >     | |  Greater then   | | a > b  |
-|   <=    | | Less then or equal to | | a <= b  |
-|   >=    | |  Greater then or equal to   | | a >= b  |
-|   ==    | |  Equal to   | | a == b  |
-|   !=    | |  Not equal to   | | a != b  |
+ | Symbol  |  Operator  | Syntax |
+ | :---:   |   :---:    | :---:  |
+ |   <     |   Less then    |  a < b  |
+ |   >     |   Greater then   |  a > b  |
+ |   <=    | Less then or equal to |  a <= b  |
+ |   >=    |   Greater then or equal to    | a >= b  |
+ |   ==    |   Equal to   |  a == b  |
+ |   !=    |   Not equal to    | a != b  |
 
 ### Logical Operators
 
-| Symbol  | | Operator | | Syntax |
-| :---:   | |  :---:   | | :---:  |
-|   and     | |  Logical AND    | | a and b  |
-|   or     | |  Lpgical OR   | | a or b |
-|   !     | | Logical NOT | | !a  |
+ | Symbol  |  Operator  | Syntax |
+ | :---:   |   :---:    | :---:  |
+ |   and      |  Logical AND     | a and b  |
+ |   or      |  Lpgical OR   |  a or b |
+ |   !      | Logical NOT |  !a  |
 
 ### Assignment Operators
 
-| Symbol  | | Operator | | Syntax |
-| :---:   | |  :---:   | | :---:  |
-|   =     | |  Simple Assignment    | | a = b  |
+ | Symbol   | Operator |  Syntax |
+ | :---:    |  :---:   |  :---:  |
+ |   =      |  Simple Assignment  | a = b  |
 
 ## Tooling
 
