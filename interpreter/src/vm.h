@@ -20,12 +20,12 @@ typedef struct {
 typedef struct {
 	Chunk *chunk; // Byte code chunk
 	uint8_t *ip; // Unique vm id
-	Value *stack; // Stack dynamic array pointer
+	Value stack[STACK_MAX]; // Stack dynamic array pointer
 	Value *stackTop; // Stack's head pointer
 	CallFrame frames[FRAMES_MAX];
 	int frameCount;
 	Table strings; // Hash table
-	Table globals;
+	Table globals; // Hash table of global variables
 	Obj *objects; // Head of object list
 } VM;
 

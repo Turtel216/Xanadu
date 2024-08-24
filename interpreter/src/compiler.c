@@ -64,11 +64,6 @@ Parser parser;
 Compiler *current;
 Chunk *compiling_chunk;
 
-static inline Chunk *current_chunk()
-{
-	return &current->function->chunk;
-}
-
 // Function definitions
 static void advance();
 static void error_at_current(const char *message);
@@ -109,6 +104,7 @@ static void expression_statement();
 static void if_statement();
 static void while_statement();
 static void for_statement();
+static void return_statement();
 static void synchronize();
 static void var_declaration();
 static uint8_t parse_variable(const char *errorMessage);
@@ -129,9 +125,9 @@ static void or_(bool can_assign);
 // Initialise compiler
 static void init_compiler(Compiler *compiler, FunctionType type)
 {
-	compiler->enclosing = current;
 	compiler->function = NULL;
 	compiler->type = type;
+	compiler->enclosing = current;
 	compiler->localCount = 0;
 	compiler->scopeDepth = 0;
 	compiler->function = new_function();
@@ -739,6 +735,11 @@ static bool match(TokenType type)
 	return true;
 }
 
+static Chunk *current_chunk()
+{
+	return &current->function->chunk;
+}
+
 // Define new block
 static void block()
 {
@@ -781,6 +782,8 @@ static void statement()
 		if_statement();
 	} else if (match(TOKEN_FOR)) {
 		for_statement();
+	} else if (match(TOKEN_RETURN)) {
+		return_statement();
 	} else if (match(TOKEN_WHILE)) {
 		while_statement();
 	} else {
@@ -874,6 +877,21 @@ static void print_statement()
 	expression();
 	consume(TOKEN_SEMICOLON, "Expect ';' after value.");
 	emit_byte(OP_PRINT);
+}
+
+static void return_statement()
+{
+	// Check for returning from main program
+	if (current->type == TYPE_SCRIPT) {
+		error("Can't return from top-level code.");
+	}
+	if (match(TOKEN_SEMICOLON)) {
+		emit_return();
+	} else {
+		expression();
+		consume(TOKEN_SEMICOLON, "Expect ';' after return value.");
+		emit_byte(OP_RETURN);
+	}
 }
 
 static void while_statement()

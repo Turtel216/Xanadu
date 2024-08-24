@@ -213,7 +213,7 @@ static TokenType identifier_type()
 	case 'b':
 		return check_keyword(1, 5, "labla", TOKEN_PRINT);
 	case 'l':
-		return check_keyword(1, 5, "imelight", TOKEN_RETURN);
+		return check_keyword(1, 8, "imelight", TOKEN_RETURN);
 	case 's':
 		return check_keyword(1, 10, "ubdivision", TOKEN_FUN);
 	case 'y':

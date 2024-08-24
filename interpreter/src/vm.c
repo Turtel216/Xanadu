@@ -2,7 +2,6 @@
 #include "common.h"
 #include "debug.h"
 #include "vm.h"
-#include "error.h"
 #include "lookup_table.h"
 #include "object.h"
 #include "compiler.h"
@@ -21,6 +20,8 @@ static Value peek(int distance);
 static void runtime_error(const char *format, ...);
 static bool is_falsey(Value value);
 static bool call_value(Value callee, int argCount);
+static void define_native(const char *name, NativeFn function);
+static Value clock_native(int argCount, Value *args);
 // Concatenate first 2 strings on the stack
 static void concatenate();
 //######################
@@ -35,17 +36,14 @@ static void reset_stack()
 // Start up virtual machine
 void init_vm()
 {
-	// Allocate memory for stack
-	vm.stack = (Value *)malloc(sizeof(Value) * STACK_MAX);
-	if (vm.stack == NULL)
-		error_msg_exit(
-			"Failed to initialize stack, memory allocation failed");
+	// Set stack head pointer and stack size
+	reset_stack();
 
 	init_table(&vm.strings);
 	init_table(&vm.globals);
 
-	// Set stack head pointer and stack size
-	reset_stack();
+	define_native("clock", clock_native);
+
 	vm.objects = NULL;
 }
 
@@ -55,7 +53,6 @@ void inline free_vm()
 	free_table(&vm.strings);
 	free_table(&vm.globals);
 	free_objects();
-	free(vm.stack);
 }
 
 // Run compiled instructions on VM
@@ -65,6 +62,7 @@ static InterpretResult run()
 
 	// marcos for vm instruction execution
 #define READ_STRING() AS_STRING(READ_CONSTANT())
+
 #define READ_BYTE() (*frame->ip++)
 
 #define READ_SHORT() \
@@ -282,6 +280,13 @@ static bool call_value(Value callee, int argCount)
 		switch (OBJ_TYPE(callee)) {
 		case OBJ_FUNCTION:
 			return call(AS_FUNCTION(callee), argCount);
+		case OBJ_NATIVE: {
+			NativeFn native = AS_NATIVE(callee);
+			Value result = native(argCount, vm.stackTop - argCount);
+			vm.stackTop -= argCount + 1;
+			push(result);
+			return true;
+		}
 		default:
 			break; // Non-callable object type.
 		}
@@ -317,6 +322,15 @@ static void runtime_error(const char *format, ...)
 	reset_stack();
 }
 
+static void define_native(const char *name, NativeFn function)
+{
+	push(OBJ_VAL(copy_string(name, (int)strlen(name))));
+	push(OBJ_VAL(new_native(function)));
+	insert_into_table(&vm.globals, AS_STRING(vm.stack[0]), vm.stack[1]);
+	pop();
+	pop();
+}
+
 // Interpret given string
 InterpretResult interpret(const char *source)
 {
@@ -350,6 +364,11 @@ static void concatenate()
 
 	ObjString *result = take_string(chars, length);
 	push(OBJ_VAL(result));
+}
+
+static Value clock_native(int argCount, Value *args)
+{
+	return NUMBER_VAL((double)clock() / CLOCKS_PER_SEC);
 }
 
 /*
