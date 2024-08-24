@@ -69,6 +69,9 @@ subdivision add(a, b) {
 }
 ```
 
+> [!CAUTION]
+> Even though function calls are implemented, a function declartion with arguments currently causes a seg fault.
+
 The **limelight** keyword in the above example functions just as a **return** keyword in other languages
 
 ### Classes
