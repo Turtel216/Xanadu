@@ -693,7 +693,7 @@ static void named_variable(Token name, bool can_assign)
 		expression();
 		emit_bytes(setOp, (uint8_t)arg);
 	} else {
-		emit_bytes(OP_GET_GLOBAL, arg);
+		emit_bytes(getOp, (uint8_t)arg);
 	}
 }
 
