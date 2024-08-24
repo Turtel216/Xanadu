@@ -1,3 +1,7 @@
+// copyright 2024 dimitrios papakonstantinou. all rights reserved.
+// use of this source code is governed by a MIT
+// license that can be found in the license file.
+
 #include "vm.h"
 #include <stdlib.h>
 #include <stdio.h>
