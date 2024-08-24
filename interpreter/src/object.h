@@ -11,6 +11,8 @@
 #define IS_STRING(value) isObjType(value, OBJ_STRING)
 // Macro for checking if an object is a native object
 #define IS_NATIVE(value) isObjType(value, OBJ_NATIVE)
+// Macro for checking if an object is a closure object
+#define IS_CLOSURE(value) isObjType(value, OBJ_CLOSURE)
 // Macro for converting a Value type to a Object String
 #define AS_STRING(value) ((ObjString *)AS_OBJ(value))
 // Macro for converting a value to type to a cstring
@@ -19,6 +21,8 @@
 #define AS_FUNCTION(value) ((ObjFunction *)AS_OBJ(value))
 // Macro for converting a value type to a native object
 #define AS_NATIVE(value) (((ObjNative *)AS_OBJ(value))->function)
+// Macro for converting a value type to a closure object
+#define AS_CLOSURE(value) ((ObjClosure *)AS_OBJ(value))
 // Macro for checking if an object is a function object
 #define IS_FUNCTION(value) isObjType(value, OBJ_FUNCTION)
 
@@ -27,6 +31,7 @@ typedef enum {
 	OBJ_STRING,
 	OBJ_FUNCTION,
 	OBJ_NATIVE,
+	OBJ_CLOSURE,
 } ObjType;
 
 // Object meta data struct
@@ -58,6 +63,11 @@ struct ObjString {
 	uint32_t hash; // Hash value
 };
 
+typedef struct {
+	Obj obj;
+	ObjFunction *function;
+} ObjClosure;
+
 // Returns true value is of the given object type
 static inline bool isObjType(Value value, ObjType type)
 {
@@ -70,6 +80,9 @@ void print_object(Value value);
 ObjString *take_string(char *chars, int length);
 // Create a function object
 ObjFunction *new_function();
+// Create a native object
 ObjNative *new_native(NativeFn function);
+// Create a closure object
+ObjClosure *new_closure(ObjFunction *function);
 
 #endif
