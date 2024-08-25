@@ -36,6 +36,7 @@ typedef enum {
 	OBJ_FUNCTION,
 	OBJ_NATIVE,
 	OBJ_CLOSURE,
+	OBJ_UPVALUE,
 } ObjType;
 
 // Object meta data struct
@@ -68,9 +69,16 @@ struct ObjString {
 	uint32_t hash; // Hash value
 };
 
+typedef struct ObjUpvalue {
+	Obj obj;
+	Value *location;
+} ObjUpvalue;
+
 typedef struct {
 	Obj obj;
 	ObjFunction *function;
+	ObjUpvalue **upvalues;
+	int upvalueCount;
 } ObjClosure;
 
 // Returns true value is of the given object type
@@ -89,5 +97,6 @@ ObjFunction *new_function();
 ObjNative *new_native(NativeFn function);
 // Create a closure object
 ObjClosure *new_closure(ObjFunction *function);
-
+// Create a upvalue obejct
+ObjUpvalue *new_upvalue(Value *slot);
 #endif

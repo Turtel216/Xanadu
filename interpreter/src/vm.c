@@ -26,6 +26,7 @@ static bool is_falsey(Value value);
 static bool call_value(Value callee, int argCount);
 static void define_native(const char *name, NativeFn function);
 static Value clock_native(int argCount, Value *args);
+static ObjUpvalue *capture_upvalue(Value *local);
 // Concatenate first 2 strings on the stack
 static void concatenate();
 //######################
@@ -133,6 +134,16 @@ static InterpretResult run()
 			push(BOOL_VAL(values_equal(a, b)));
 			break;
 		}
+		case OP_GET_UPVALUE: {
+			uint8_t slot = READ_BYTE();
+			push(*frame->closure->upvalues[slot]->location);
+			break;
+		}
+		case OP_SET_UPVALUE: {
+			uint8_t slot = READ_BYTE();
+			*frame->closure->upvalues[slot]->location = peek(0);
+			break;
+		}
 		case OP_ADD: {
 			if (IS_STRING(peek(0)) && IS_STRING(peek(1))) {
 				concatenate();
@@ -235,6 +246,17 @@ static InterpretResult run()
 			ObjFunction *function = AS_FUNCTION(READ_CONSTANT());
 			ObjClosure *closure = new_closure(function);
 			push(OBJ_VAL(closure));
+			for (int i = 0; i < closure->upvalueCount; i++) {
+				uint8_t isLocal = READ_BYTE();
+				uint8_t index = READ_BYTE();
+				if (isLocal) {
+					closure->upvalues[i] = capture_upvalue(
+						frame->slots + index);
+				} else {
+					closure->upvalues[i] =
+						frame->closure->upvalues[index];
+				}
+			}
 			break;
 		}
 		case OP_RETURN: {
@@ -305,6 +327,12 @@ static bool call_value(Value callee, int argCount)
 	}
 	runtime_error("Can only call functions and classes.");
 	return false;
+}
+
+static ObjUpvalue *capture_upvalue(Value *local)
+{
+	ObjUpvalue *createdUpvalue = new_upvalue(local);
+	return createdUpvalue;
 }
 
 // Throw runtime error and reset stack
