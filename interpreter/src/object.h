@@ -50,6 +50,7 @@ typedef struct {
 	int arity; //
 	Chunk chunk; // Bytecode info
 	ObjString *name; // String info
+	int upvalueCount;
 } ObjFunction;
 
 typedef Value (*NativeFn)(int argCount, Value *args);
