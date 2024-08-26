@@ -52,6 +52,7 @@ typedef struct {
 typedef struct {
 	Token name; // Variable name
 	int depth; // Variable scope
+	bool isCaptured; // Track if varibale is captured
 } Local;
 
 typedef struct {
@@ -181,9 +182,11 @@ static void init_compiler(Compiler *compiler, FunctionType type)
 						      parser.previous.length);
 	}
 
-	// Initialize local variable array
+	// Create slot zero local
 	Local *local = &current->locals[current->localCount++];
 	local->depth = 0;
+	// Mark as uncaptured
+	local->isCaptured = false;
 	local->name.start = "";
 	local->name.length = 0;
 }
@@ -611,6 +614,8 @@ static void add_local(Token name)
 
 	Local *local = &current->locals[current->localCount++];
 	local->name = name;
+	// Mark variable as uncaptured
+	local->isCaptured = false;
 	// Mark variable as uninitialized
 	local->depth = -1;
 }
@@ -798,6 +803,8 @@ static int resolve_upvalue(Compiler *compiler, Token *name)
 
 	int local = resolve_local(compiler->enclosing, name);
 	if (local != -1) {
+		// Mark local variable as captured
+		compiler->enclosing->locals[local].isCaptured = true;
 		return add_upvalue(compiler, (uint8_t)local, true);
 	}
 
@@ -883,7 +890,12 @@ static void end_scope(void)
 	while (current->localCount > 0 &&
 	       current->locals[current->localCount - 1].depth >
 		       current->scopeDepth) {
-		emit_byte(OP_POP);
+		// Place captured variables onto the stack
+		if (current->locals[current->localCount - 1].isCaptured) {
+			emit_byte(OP_CLOSE_UPVALUE);
+		} else {
+			emit_byte(OP_POP);
+		}
 		current->localCount--;
 	}
 }

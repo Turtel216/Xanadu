@@ -75,6 +75,8 @@ struct ObjString {
 typedef struct ObjUpvalue {
 	Obj obj; // Xanadu VM Object
 	Value *location; // Location of the upvalue on the stack
+	struct ObjUpvalue *next; // Pointer to next node in upvalue linked list
+	Value closed; // Hold closed upvalue value
 } ObjUpvalue;
 
 // Object wrapper for Closure objects

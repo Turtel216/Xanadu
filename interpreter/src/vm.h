@@ -31,6 +31,7 @@ typedef struct {
 	Table strings; // Hash table
 	Table globals; // Hash table of global variables
 	Obj *objects; // Head of object list
+	ObjUpvalue *openUpvalues; // Array of open up values
 } VM;
 
 // Global to program vm struct
