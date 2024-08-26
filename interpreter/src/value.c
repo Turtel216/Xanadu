@@ -9,6 +9,7 @@
 #include "value.h"
 #include "object.h"
 
+// Initialize array of value structs
 void init_value_array(ValueArray *array)
 {
 	array->values = NULL;
@@ -16,6 +17,7 @@ void init_value_array(ValueArray *array)
 	array->count = 0;
 }
 
+// Add value to value array
 void write_value_array(ValueArray *array, Value value)
 {
 	if (array->capacity < array->count + 1) {
@@ -29,12 +31,14 @@ void write_value_array(ValueArray *array, Value value)
 	array->count++;
 }
 
+// Free array of value structs
 void free_value_array(ValueArray *array)
 {
 	FREE_ARRAY(Value, array->values, array->capacity);
 	init_value_array(array);
 }
 
+// Print value to iostream
 void print_value(Value value)
 {
 	switch (value.type) {

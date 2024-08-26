@@ -62,11 +62,14 @@ typedef enum {
 	INTERPRET_RUNTIME_ERROR
 } InterpretResult;
 
+// Initialize array of value structs
 void init_value_array(ValueArray *array);
+// Add value to value array
 void write_value_array(ValueArray *array, Value value);
+// Free array of value structs
 void free_value_array(ValueArray *array);
+// Print value to iostream
 void print_value(Value value);
-InterpretResult interpret(const char *source);
 // Checks if two values are equal
 bool values_equal(Value a, Value b);
 

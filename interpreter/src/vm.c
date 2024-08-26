@@ -11,17 +11,22 @@
 #include "compiler.h"
 #include "memory.h"
 #include "value.h"
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
 #include <stdarg.h>
 
+// Global Variables
 VM vm;
 
 // Function declarations
+// Get stack value of specific distance
 static Value peek(int distance);
+// Throw runtime error and reset stack
 static void runtime_error(const char *format, ...);
+// Check bool value of Value type
 static bool is_falsey(Value value);
 static bool call_value(Value callee, int argCount);
 static void define_native(const char *name, NativeFn function);
