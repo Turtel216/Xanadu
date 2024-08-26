@@ -65,6 +65,6 @@ typedef struct {
 // Start up scanner
 void init_scanner(const char *source);
 // Run scanner
-Token scan_token();
+Token scan_token(void);
 
 #endif

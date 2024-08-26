@@ -2,10 +2,10 @@
 // use of this source code is governed by a MIT
 // license that can be found in the license file.
 
-#include <stdint.h>
 #define ALLOCATE_OBJ(type, objectType) \
 	(type *)allocate_object(sizeof(type), objectType)
 
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -15,7 +15,7 @@
 #include "vm.h"
 #include "lookup_table.h"
 
-// Print function types to console
+// Print function types to iostream
 static void print_function(ObjFunction *function)
 {
 	if (function->name == NULL) {
@@ -25,7 +25,7 @@ static void print_function(ObjFunction *function)
 	printf("<fn %s>", function->name->chars);
 }
 
-// Print object types to console
+// Print object types to iostream
 void print_object(Value value)
 {
 	switch (OBJ_TYPE(value)) {
@@ -47,6 +47,7 @@ void print_object(Value value)
 	}
 }
 
+// Allocate new Object with specified type and size
 static Obj *allocate_object(size_t size, ObjType type)
 {
 	Obj *object = (Obj *)reallocate(NULL, 0, size);
@@ -67,8 +68,10 @@ static uint32_t hash_string(const char *key, int length)
 	return hash;
 }
 
+// Alocate new ObjString and return said object
 static ObjString *allocate_string(char *chars, int length, uint32_t hash)
 {
+	// Create new String object
 	ObjString *string = ALLOCATE_OBJ(ObjString, OBJ_STRING);
 	string->length = length;
 	string->chars = chars;
@@ -79,6 +82,7 @@ static ObjString *allocate_string(char *chars, int length, uint32_t hash)
 	return string;
 }
 
+// Copy string to new ObjString and return new object
 ObjString *copy_string(const char *chars, int length)
 {
 	// Calculate hash value
@@ -86,6 +90,7 @@ ObjString *copy_string(const char *chars, int length)
 	ObjString *interned =
 		table_find_string(&vm.strings, chars, length, hash);
 
+	// Notify user since string not found on the hash table
 	if (interned != NULL)
 		return interned;
 
@@ -93,6 +98,7 @@ ObjString *copy_string(const char *chars, int length)
 	char *heap_chars = ALLOCATE(char, length + 1);
 	memcpy(heap_chars, chars, length);
 	heap_chars[length] = '\0';
+	// Allocate new string and return String object
 	return allocate_string(heap_chars, length, hash);
 }
 
@@ -102,6 +108,7 @@ ObjString *take_string(char *chars, int length)
 	// Calculate hash value
 	uint32_t hash = hash_string(chars, length);
 
+	// Insert new string into hash table
 	ObjString *interned =
 		table_find_string(&vm.strings, chars, length, hash);
 	if (interned != NULL) {
@@ -109,18 +116,25 @@ ObjString *take_string(char *chars, int length)
 		return interned;
 	}
 
+	// Allocate and return new String object
 	return allocate_string(chars, length, hash);
 }
 
-ObjFunction *new_function()
+// Create a function object
+ObjFunction *new_function(void)
 {
+	// Create new function object
 	ObjFunction *function = ALLOCATE_OBJ(ObjFunction, OBJ_FUNCTION);
 	function->arity = 0;
 	function->upvalueCount = 0;
 	function->name = NULL;
+
+	// Initialize byte code data and return object
 	init_chunk(&function->chunk);
 	return function;
 }
+
+// Create a native object
 ObjNative *new_native(NativeFn function)
 {
 	ObjNative *native = ALLOCATE_OBJ(ObjNative, OBJ_NATIVE);
@@ -128,13 +142,16 @@ ObjNative *new_native(NativeFn function)
 	return native;
 }
 
+// Create a closure object
 ObjClosure *new_closure(ObjFunction *function)
 {
+	// Create Upvalue object and initialize upvalues
 	ObjUpvalue **upvalues = ALLOCATE(ObjUpvalue *, function->upvalueCount);
 	for (int i = 0; i < function->upvalueCount; i++) {
 		upvalues[i] = NULL;
 	}
 
+	// Create closure object
 	ObjClosure *closure = ALLOCATE_OBJ(ObjClosure, OBJ_CLOSURE);
 	closure->function = function;
 	closure->upvalues = upvalues;
@@ -142,6 +159,7 @@ ObjClosure *new_closure(ObjFunction *function)
 	return closure;
 }
 
+// Create a upvalue obejct
 ObjUpvalue *new_upvalue(Value *slot)
 {
 	ObjUpvalue *upvalue = ALLOCATE_OBJ(ObjUpvalue, OBJ_UPVALUE);

@@ -39,29 +39,31 @@ typedef enum {
 	OBJ_UPVALUE,
 } ObjType;
 
-// Object meta data struct
+// Object for the Xanadu VM
 struct Obj {
 	ObjType type; // Type of object
 	struct Obj *next; // Pointer to next object in object list
 };
 
-// Function meta data struct
+// Object wrapper for function object
 typedef struct {
 	Obj obj; // Object type
-	int arity; //
+	int arity; // Number of function arguments
 	Chunk chunk; // Bytecode info
 	ObjString *name; // String info
-	int upvalueCount;
+	int upvalueCount; // Number of upvalues
 } ObjFunction;
 
+// Function pointer for Native Functions
 typedef Value (*NativeFn)(int argCount, Value *args);
 
+// Object wrapper for Native Objects
 typedef struct {
-	Obj obj;
-	NativeFn function;
+	Obj obj; // Xanadu VM object
+	NativeFn function; // Native function
 } ObjNative;
 
-// Meta data for String object
+// Object wrapper for String object
 struct ObjString {
 	Obj obj; // Object data
 	int length; // String length
@@ -69,16 +71,18 @@ struct ObjString {
 	uint32_t hash; // Hash value
 };
 
+// Object wrapper for Upvalue objects
 typedef struct ObjUpvalue {
-	Obj obj;
-	Value *location;
+	Obj obj; // Xanadu VM Object
+	Value *location; // Location of the upvalue on the stack
 } ObjUpvalue;
 
+// Object wrapper for Closure objects
 typedef struct {
-	Obj obj;
-	ObjFunction *function;
-	ObjUpvalue **upvalues;
-	int upvalueCount;
+	Obj obj; // Xanadu VM Object
+	ObjFunction *function; // Array of functions on the call stack
+	ObjUpvalue **upvalues; // Array of upvalues
+	int upvalueCount; //Number of upvalues associeted with the closure object
 } ObjClosure;
 
 // Returns true value is of the given object type
@@ -87,16 +91,19 @@ static inline bool isObjType(Value value, ObjType type)
 	return IS_OBJ(value) && AS_OBJ(value)->type == type;
 }
 
+// Copy string to new ObjString and return new object
 ObjString *copy_string(const char *chars, int length);
+// Print object types to iostream
 void print_object(Value value);
 // Create a string object
 ObjString *take_string(char *chars, int length);
 // Create a function object
-ObjFunction *new_function();
+ObjFunction *new_function(void);
 // Create a native object
 ObjNative *new_native(NativeFn function);
 // Create a closure object
 ObjClosure *new_closure(ObjFunction *function);
 // Create a upvalue obejct
 ObjUpvalue *new_upvalue(Value *slot);
+
 #endif

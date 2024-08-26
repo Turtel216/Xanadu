@@ -27,6 +27,7 @@ void free_table(Table *table)
 	init_table(table);
 }
 
+// Copy contents of one table into another
 void table_add_all(Table *from, Table *to)
 {
 	for (int i = 0; i < from->capacity; i++) {
@@ -37,6 +38,7 @@ void table_add_all(Table *from, Table *to)
 	}
 }
 
+// Find table entry
 static Entry *find_entry(Entry *entries, int capacity, ObjString *key)
 {
 	uint32_t index = key->hash % capacity;
@@ -98,6 +100,7 @@ bool delete_from_table(Table *table, ObjString *key)
 	return true;
 }
 
+// Update tables capacity
 static void adjust_capacity(Table *table, int capacity)
 {
 	// Allocate memory of old table

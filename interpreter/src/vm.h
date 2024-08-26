@@ -33,17 +33,18 @@ typedef struct {
 	Obj *objects; // Head of object list
 } VM;
 
+// Global to program vm struct
 extern VM vm;
 
 // Start up virtual machine
-void init_vm();
+void init_vm(void);
 // Close virtual machine and free up memory
-void free_vm();
+void free_vm(void);
 // Interpret given string
 InterpretResult interpret(const char *source);
 // Push onto VM stack
 void push(Value value);
 // Pop from VM stack
-Value pop();
+Value pop(void);
 
 #endif

@@ -8,6 +8,7 @@
 #include "chunk.h"
 #include "object.h"
 
+// Compile source string
 ObjFunction *compile(const char *source);
 
 #endif

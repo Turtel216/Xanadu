@@ -10,15 +10,15 @@
 
 // Table entry ifnormation
 typedef struct {
-	ObjString *key;
-	Value value;
+	ObjString *key; // Entry object
+	Value value; // Entry value
 } Entry;
 
 // Table meta data
 typedef struct {
-	int count;
-	int capacity;
-	Entry *entries;
+	int count; // Element count
+	int capacity; // Capacity count
+	Entry *entries; // Array of entries
 } Table;
 
 // Initialise look up table

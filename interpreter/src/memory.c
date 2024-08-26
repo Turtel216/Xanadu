@@ -9,6 +9,7 @@
 #include "object.h"
 #include "vm.h"
 
+// Realocate given type
 void *reallocate(void *pointer, size_t oldSize, size_t newSize)
 {
 	if (newSize == 0) {
@@ -23,8 +24,10 @@ void *reallocate(void *pointer, size_t oldSize, size_t newSize)
 	return result;
 }
 
+// Free Xanadu VM object
 static void free_object(Obj *object)
 {
+	// Check for object type and free accordingly
 	switch (object->type) {
 	case OBJ_STRING: {
 		ObjString *string = (ObjString *)object;
@@ -54,7 +57,8 @@ static void free_object(Obj *object)
 	}
 }
 
-void free_objects()
+// Free all objects from Xanadu VM
+void free_objects(void)
 {
 	Obj *object = vm.objects;
 	while (object != NULL) {

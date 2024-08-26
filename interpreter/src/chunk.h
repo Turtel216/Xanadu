@@ -53,7 +53,9 @@ typedef struct {
 void init_chunk(Chunk *chunk);
 // Free chunk
 void free_chunk(Chunk *chunk);
+// Updated chunk
 void write_chunk(Chunk *chunk, uint8_t byte, int line);
+// Add constant value to chunk
 int add_constant(Chunk *chunk, Value value);
 
 #endif

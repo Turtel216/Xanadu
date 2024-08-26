@@ -28,18 +28,20 @@ static void define_native(const char *name, NativeFn function);
 static Value clock_native(int argCount, Value *args);
 static ObjUpvalue *capture_upvalue(Value *local);
 // Concatenate first 2 strings on the stack
-static void concatenate();
+static void concatenate(void);
 //######################
 
+// Function definition
+
 // Reset stack to initiale state
-static void reset_stack()
+static void reset_stack(void)
 {
 	vm.stackTop = vm.stack;
 	vm.frameCount = 0;
 }
 
 // Start up virtual machine
-void init_vm()
+void init_vm(void)
 {
 	// Set stack head pointer and stack size
 	reset_stack();
@@ -53,7 +55,7 @@ void init_vm()
 }
 
 // Close virtual machine and free up memory
-void inline free_vm()
+void inline free_vm(void)
 {
 	free_table(&vm.strings);
 	free_table(&vm.globals);
@@ -61,7 +63,7 @@ void inline free_vm()
 }
 
 // Run compiled instructions on VM
-static InterpretResult run()
+static InterpretResult run(void)
 {
 	CallFrame *frame = &vm.frames[vm.frameCount - 1];
 
@@ -394,7 +396,7 @@ static bool is_falsey(Value value)
 }
 
 // Concatenate first 2 strings on the stack
-static void concatenate()
+static void concatenate(void)
 {
 	ObjString *b = AS_STRING(pop());
 	ObjString *a = AS_STRING(pop());
@@ -434,8 +436,9 @@ void push(Value value)
 }
 
 // Pop from VM stack
-Value pop()
+Value pop(void)
 {
 	--vm.stackTop;
 	return *vm.stackTop;
 }
+//####################
