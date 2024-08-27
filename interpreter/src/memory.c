@@ -9,9 +9,19 @@
 #include "object.h"
 #include "vm.h"
 
+#ifdef DEBUG_LOG_GC
+#include <stdio.h>
+#include "debug.h"
+#endif
+
 // Realocate given type
 void *reallocate(void *pointer, size_t oldSize, size_t newSize)
 {
+	if (newSize > oldSize) {
+#ifdef DEBUG_STRESS_GC
+		collect_garbage();
+#endif
+	}
 	if (newSize == 0) {
 		free(pointer);
 		return NULL;
@@ -27,6 +37,10 @@ void *reallocate(void *pointer, size_t oldSize, size_t newSize)
 // Free Xanadu VM object
 static void free_object(Obj *object)
 {
+#ifdef DEBUG_LOG_GC
+	printf("%p free type %d\n", (void *)object, object->type);
+#endif
+
 	// Check for object type and free accordingly
 	switch (object->type) {
 	case OBJ_STRING: {
@@ -66,4 +80,16 @@ void free_objects(void)
 		free_object(object);
 		object = next;
 	}
+}
+
+// Free unused xanadu variables
+void collect_garbage()
+{
+#ifdef DEBUG_LOG_GC
+	printf("-- gc begin\n");
+#endif
+
+#ifdef DEBUG_LOG_GC
+	printf("-- gc end\n");
+#endif
 }

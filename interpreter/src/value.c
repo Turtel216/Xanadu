@@ -60,8 +60,11 @@ void print_value(Value value)
 // Checks if two values are equal
 bool values_equal(Value a, Value b)
 {
+	// Check if values are of equal type
 	if (a.type != b.type)
 		return false;
+
+	// Check all types
 	switch (a.type) {
 	case VAL_BOOL:
 		return AS_BOOL(a) == AS_BOOL(b);

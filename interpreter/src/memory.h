@@ -30,4 +30,7 @@ void *reallocate(void *pointer, size_t oldSize, size_t newSize);
 // Free memory for object list
 void free_objects(void);
 
+// Free unused xanadu variables
+void collect_garbage();
+
 #endif
