@@ -5,17 +5,27 @@
 > [!WARNING]
 > The language is still under development and will probably undergo several changes before release. Keywords are most likely to change in the future
 
-## Syntax
+## Language Overview
 
 Xanadu is a dynamically typed language. Each statement has to end with a semicolone ( ; ).
 
-### Variables
+### Declarations
 
 The **yyz** keyword is used for declaring variables.
 
 ```ruby
 yyz name = "Xanadu";
 ```
+
+Functions are declared using the **subdivision** keyword 
+
+```ruby
+subdivision add(a, b) {
+   limelight a + b
+}
+```
+
+The **limelight** keyword in the above example functions just as a **return** keyword in other languages
 
 ### Writting to the console
 
@@ -61,18 +71,6 @@ freewill(1 == 2) {
 }
 ```
 
-### Functions
-
-Functions are declared using the **subdivision** keyword 
-
-```ruby
-subdivision add(a, b) {
-   limelight a + b
-}
-```
-
-The **limelight** keyword in the above example functions just as a **return** keyword in other languages
-
 ### Classes
 
 Classes in Xanadu are declared using the **overtune** keyword
@@ -84,9 +82,9 @@ overtune Band
 }
 ```
 
-## Operators
+### Operators
 
-### Arithmetic Operators 
+#### Arithmetic Operators 
 
  | Symbol   | Operator  | Syntax |
  | :---:    |  :---:    | :---:  |
@@ -95,7 +93,7 @@ overtune Band
  |   *      | Multiply  | a * b  |
  |   /      |  Divide    | a / b  |
 
-### Relational Operators
+#### Relational Operators
 
  | Symbol  |  Operator  | Syntax |
  | :---:   |   :---:    | :---:  |
@@ -106,7 +104,7 @@ overtune Band
  |   ==    |   Equal to   |  a == b  |
  |   !=    |   Not equal to    | a != b  |
 
-### Logical Operators
+#### Logical Operators
 
  | Symbol  |  Operator  | Syntax |
  | :---:   |   :---:    | :---:  |
@@ -114,7 +112,7 @@ overtune Band
  |   or      |  Logical OR   |  a or b |
  |   !      | Logical NOT |  !a  |
 
-### Assignment Operators
+#### Assignment Operators
 
  | Symbol   | Operator |  Syntax |
  | :---:    |  :---:   |  :---:  |
