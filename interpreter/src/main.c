@@ -6,9 +6,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+// Functioin declaration
 static void repl();
 static void run_file(const char *path);
 static char *read_file(const char *path);
+//######################
 
 int main(int argc, char *argv[])
 {
@@ -31,8 +33,10 @@ int main(int argc, char *argv[])
 	return EXIT_SUCCESS;
 }
 
+// Functioin Definition
+
 // Command line interpreter
-static void repl()
+static void repl(void)
 {
 	// input buffer
 	char line[1024];
@@ -99,3 +103,5 @@ static char *read_file(const char *path)
 	fclose(file);
 	return buffer;
 }
+
+//#####################

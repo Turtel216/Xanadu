@@ -11,4 +11,7 @@
 // Compile source string
 ObjFunction *compile(const char *source);
 
+// Mark values heap allocated by the compiler
+void mark_compiler_roots();
+
 #endif

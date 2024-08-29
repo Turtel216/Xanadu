@@ -6,6 +6,8 @@
 #define xanadu_memory_h
 
 #include "common.h"
+#include "value.h"
+#include "lookup_table.h"
 
 // Macro for expending an arrays capacity
 #define GROW_CAPACITY(capacity) ((capacity) < 8 ? 8 : (capacity) * 2)
@@ -31,6 +33,15 @@ void *reallocate(void *pointer, size_t oldSize, size_t newSize);
 void free_objects(void);
 
 // Free unused xanadu variables
-void collect_garbage();
+void collect_garbage(void);
+
+// Mark a xanadu value for garbage collection
+void mark_value(Value value);
+
+// Mark a xanadu object for garbage collection
+void mark_object(Obj *object);
+
+// Mark global xanadu variables
+void mark_table(Table *table);
 
 #endif

@@ -43,6 +43,7 @@ typedef enum {
 struct Obj {
 	ObjType type; // Type of object
 	struct Obj *next; // Pointer to next object in object list
+	bool is_marked; // Track if object is marked for gc
 };
 
 // Object wrapper for function object
