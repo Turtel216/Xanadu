@@ -53,16 +53,19 @@ void init_vm(void)
 	// Set stack head pointer and stack size
 	reset_stack();
 
+	vm.objects = NULL;
+	vm.gray_count = 0;
+	vm.gray_capacity = 0;
+	vm.gray_stack = NULL;
+
 	init_table(&vm.strings);
 	init_table(&vm.globals);
 
 	define_native("clock", clock_native);
-
-	vm.objects = NULL;
 }
 
 // Close virtual machine and free up memory
-void inline free_vm(void)
+void free_vm(void)
 {
 	free_table(&vm.strings);
 	free_table(&vm.globals);
