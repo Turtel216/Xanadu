@@ -7,7 +7,15 @@
 
 ## Language Overview
 
-Xanadu is a dynamically typed language. Each statement has to end with a semicolone ( ; ).
+Xanadu is a dynamically typed object oriented language with automatic memory management in the form of a garbage collector. Each statement has to end with a semicolone ( ; ).
+
+### Comments
+
+Comments in Xanadu start with the double forward slash ( // ).
+
+```ruby 
+// this is a comment 
+```
 
 ### Declarations
 
@@ -27,12 +35,18 @@ subdivision add(a, b) {
 
 The **limelight** keyword in the above example functions just as a **return** keyword in other languages
 
+The function can later be called like this
+
+```ruby 
+yyz x = add(1, 2); // Assigns value of 3 to variable x
+```
+
 ### Writting to the console
 
 To write to the console use the **blabla** keyword 
 
 ```ruby
-blabla "Piece";
+blabla "Piece"; 
 ```
 
 ### Control flow
@@ -47,10 +61,10 @@ workingmans_grind(true) {
 
 **for** loops are declared using the **circumstances** keyword 
 
-```ruby
+```ruby 
 circumstances(yyz i = 0; i < 10; i = i + 1) {
     blabla i;
-}
+} 
 ```
 
 **if** statements are declared using the **freewill** keyword
@@ -68,7 +82,7 @@ freewill(1 == 2) {
    blabla "I will choose free will";
 } counterpoint {
    blabla "You still made a choice";
-}
+} 
 ```
 
 ### Classes
