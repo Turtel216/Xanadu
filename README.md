@@ -13,7 +13,7 @@ Xanadu is a dynamically typed object oriented language with automatic memory man
 
 Comments in Xanadu start with the double forward slash ( // ).
 
-```ruby 
+```c 
 // this is a comment 
 ```
 
