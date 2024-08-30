@@ -82,8 +82,13 @@ static ObjString *allocate_string(char *chars, int length, uint32_t hash)
 	string->chars = chars;
 	string->hash = hash;
 
+	push(OBJ_VAL(string));
+
 	// Insert object into hash table
 	insert_into_table(&vm.strings, string, NIL_VAL);
+
+	pop();
+
 	return string;
 }
 

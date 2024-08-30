@@ -456,6 +456,10 @@ static void concatenate(void)
 	chars[length] = '\0';
 
 	ObjString *result = take_string(chars, length);
+
+	pop();
+	pop();
+
 	push(OBJ_VAL(result));
 }
 

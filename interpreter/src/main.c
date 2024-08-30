@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 		run_file(argv[1]); // run file interpreter
 	} else {
 		// Insufficient number of arguments, exit with error message
-		fprintf(stderr, "Usage: clox [path]\n");
+		fprintf(stderr, "Usage: xi [path]\n");
 		exit(64);
 	}
 
