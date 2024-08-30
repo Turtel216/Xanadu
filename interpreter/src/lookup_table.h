@@ -36,5 +36,6 @@ bool delete_from_table(Table *table, ObjString *key);
 // Find String object in hash table
 ObjString *table_find_string(Table *table, const char *chars, int length,
 			     uint32_t hash);
+void table_remove_white(Table *table);
 
 #endif

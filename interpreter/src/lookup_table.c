@@ -176,3 +176,13 @@ bool insert_into_table(Table *table, ObjString *key, Value value)
 	entry->value = value;
 	return isNewKey;
 }
+
+void table_remove_white(Table *table)
+{
+	for (int i = 0; i < table->capacity; i++) {
+		Entry *entry = &table->entries[i];
+		if (entry->key != NULL && !entry->key->obj.is_marked) {
+			delete_from_table(table, entry->key);
+		}
+	}
+}
