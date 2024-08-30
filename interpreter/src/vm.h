@@ -35,6 +35,8 @@ typedef struct {
 	int gray_count;
 	int gray_capacity;
 	Obj **gray_stack;
+	size_t bytesAllocated;
+	size_t nextGC;
 } VM;
 
 // Global to program vm struct

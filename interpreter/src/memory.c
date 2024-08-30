@@ -2,6 +2,8 @@
 // use of this source code is governed by a MIT
 // license that can be found in the license file.
 
+#define GC_HEAP_GROW_FACTOR 2
+
 #include <stdlib.h>
 
 #include "memory.h"
@@ -18,11 +20,18 @@
 // Realocate given type
 void *reallocate(void *pointer, size_t oldSize, size_t newSize)
 {
+	vm.bytesAllocated += newSize - oldSize;
+
 	if (newSize > oldSize) {
 #ifdef DEBUG_STRESS_GC
 		collect_garbage();
 #endif
+
+		if (vm.bytesAllocated > vm.nextGC) {
+			collect_garbage();
+		}
 	}
+
 	if (newSize == 0) {
 		free(pointer);
 		return NULL;
@@ -234,6 +243,7 @@ void collect_garbage(void)
 {
 #ifdef DEBUG_LOG_GC
 	printf("-- gc begin\n");
+	size_t before = vm.bytesAllocated;
 #endif
 
 	mark_roots();
@@ -241,7 +251,12 @@ void collect_garbage(void)
 	table_remove_white(&vm.strings);
 	sweep();
 
+	vm.nextGC = vm.bytesAllocated * GC_HEAP_GROW_FACTOR;
+
 #ifdef DEBUG_LOG_GC
 	printf("-- gc end\n");
+	printf("   collected %zu bytes (from %zu to %zu) next at %zu\n",
+	       before - vm.bytesAllocated, before, vm.bytesAllocated,
+	       vm.nextGC);
 #endif
 }

@@ -57,6 +57,8 @@ void init_vm(void)
 	vm.gray_count = 0;
 	vm.gray_capacity = 0;
 	vm.gray_stack = NULL;
+	vm.bytesAllocated = 0;
+	vm.nextGC = 1024 * 1024;
 
 	init_table(&vm.strings);
 	init_table(&vm.globals);
