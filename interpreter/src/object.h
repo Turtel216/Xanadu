@@ -103,6 +103,7 @@ typedef struct {
 typedef struct {
 	Obj obj;
 	ObjString *name;
+	Table methods; // Class methods
 } ObjClass;
 
 // Object wrapper for Xanadu Object Instances

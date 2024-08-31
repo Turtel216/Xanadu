@@ -33,6 +33,7 @@ static void define_native(const char *name, NativeFn function);
 static Value clock_native(int argCount, Value *args);
 static ObjUpvalue *capture_upvalue(Value *local);
 static void close_upvalues(Value *last);
+static void define_method(ObjString *name);
 // Concatenate first 2 strings on the stack
 static void concatenate(void);
 //######################
@@ -307,6 +308,9 @@ static InterpretResult run(void)
 			}
 			break;
 		}
+		case OP_METHOD:
+			define_method(READ_STRING());
+			break;
 		case OP_CLOSE_UPVALUE:
 			close_upvalues(vm.stackTop - 1);
 			pop();
@@ -426,6 +430,14 @@ static void close_upvalues(Value *last)
 		upvalue->location = &upvalue->closed;
 		vm.openUpvalues = upvalue->next;
 	}
+}
+
+static void define_method(ObjString *name)
+{
+	Value method = peek(0);
+	ObjClass *klass = AS_CLASS(peek(1));
+	insert_into_table(&klass->methods, name, method);
+	pop();
 }
 
 // Throw runtime error and reset stack
