@@ -53,6 +53,10 @@ static void free_object(Obj *object)
 
 	// Check for object type and free accordingly
 	switch (object->type) {
+	case OBJ_CLASS: {
+		FREE(ObjClass, object);
+		break;
+	}
 	case OBJ_STRING: {
 		ObjString *string = (ObjString *)object;
 		FREE_ARRAY(char, string->chars, string->length + 1);
@@ -147,6 +151,11 @@ static void blacken_object(Obj *object)
 #endif
 
 	switch (object->type) {
+	case OBJ_CLASS: {
+		ObjClass *klass = (ObjClass *)object;
+		mark_object((Obj *)klass->name);
+		break;
+	}
 	case OBJ_CLOSURE: {
 		ObjClosure *closure = (ObjClosure *)object;
 		mark_object((Obj *)closure->function);

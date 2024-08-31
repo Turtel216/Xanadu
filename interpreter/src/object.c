@@ -29,6 +29,9 @@ static void print_function(ObjFunction *function)
 void print_object(Value value)
 {
 	switch (OBJ_TYPE(value)) {
+	case OBJ_CLASS:
+		printf("%s", AS_CLASS(value)->name->chars);
+		break;
 	case OBJ_STRING:
 		printf("%s", AS_CSTRING(value));
 		break;
@@ -177,4 +180,12 @@ ObjUpvalue *new_upvalue(Value *slot)
 	upvalue->next = NULL;
 	upvalue->closed = NIL_VAL;
 	return upvalue;
+}
+
+// Create a Class Object
+ObjClass *new_class(ObjString *name)
+{
+	ObjClass *klass = ALLOCATE_OBJ(ObjClass, OBJ_CLASS);
+	klass->name = name;
+	return klass;
 }

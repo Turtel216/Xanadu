@@ -39,6 +39,7 @@ typedef enum {
 	OP_NEGATE,
 	OP_PRINT,
 	OP_RETURN,
+	OP_CLASS,
 } OpCode;
 
 // Chunk holding byte code

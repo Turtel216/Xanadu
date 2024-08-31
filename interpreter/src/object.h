@@ -29,6 +29,10 @@
 #define AS_CLOSURE(value) ((ObjClosure *)AS_OBJ(value))
 // Macro for checking if an object is a function object
 #define IS_FUNCTION(value) isObjType(value, OBJ_FUNCTION)
+// Macro for checking if an object is a Xanadu Object
+#define IS_CLASS(value) isObjType(value, OBJ_CLASS)
+// Macro for converting a value type to a xanadu object
+#define AS_CLASS(value) ((ObjClass *)AS_OBJ(value))
 
 // Enum containing the types of objects
 typedef enum {
@@ -37,6 +41,7 @@ typedef enum {
 	OBJ_NATIVE,
 	OBJ_CLOSURE,
 	OBJ_UPVALUE,
+	OBJ_CLASS,
 } ObjType;
 
 // Object for the Xanadu VM
@@ -88,6 +93,12 @@ typedef struct {
 	int upvalueCount; //Number of upvalues associeted with the closure object
 } ObjClosure;
 
+// Object wrapper for Xanadu Objects
+typedef struct {
+	Obj obj;
+	ObjString *name;
+} ObjClass;
+
 // Returns true value is of the given object type
 static inline bool isObjType(Value value, ObjType type)
 {
@@ -108,5 +119,7 @@ ObjNative *new_native(NativeFn function);
 ObjClosure *new_closure(ObjFunction *function);
 // Create a upvalue obejct
 ObjUpvalue *new_upvalue(Value *slot);
+// Create a Class Object
+ObjClass *new_class(ObjString *name);
 
 #endif

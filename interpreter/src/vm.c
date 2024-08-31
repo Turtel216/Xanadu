@@ -277,6 +277,9 @@ static InterpretResult run(void)
 			close_upvalues(vm.stackTop - 1);
 			pop();
 			break;
+		case OP_CLASS:
+			push(OBJ_VAL(new_class(READ_STRING())));
+			break;
 		case OP_RETURN: {
 			Value result = pop();
 			close_upvalues(frame->slots);

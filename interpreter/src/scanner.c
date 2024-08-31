@@ -185,8 +185,6 @@ static TokenType identifier_type(void)
 	switch (scanner.start[0]) {
 	case 'a':
 		return check_keyword(1, 2, "nd", TOKEN_AND);
-	case 'O':
-		return check_keyword(1, 4, "vertune", TOKEN_CLASS);
 	case 'f':
 		return check_keyword(1, 7, "reewill", TOKEN_IF);
 	case 'c':
@@ -206,10 +204,10 @@ static TokenType identifier_type(void)
 	case 'o':
 		if (scanner.current - scanner.start > 1) {
 			switch (scanner.start[1]) {
-			case 'a':
-				return check_keyword(1, 1, "r", TOKEN_OR);
+			case 'r':
+				return check_keyword(2, 1, "r", TOKEN_OR);
 			case 'v':
-				return check_keyword(1, 4, "ertune",
+				return check_keyword(2, 6, "ertune",
 						     TOKEN_CLASS);
 			}
 		}

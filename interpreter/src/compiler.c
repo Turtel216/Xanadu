@@ -434,6 +434,19 @@ static void function(FunctionType type)
 	}
 }
 
+static void class_declaration()
+{
+	consume(TOKEN_IDENTIFIER, "Expect class name.");
+	uint8_t nameConstant = identifier_constant(&parser.previous);
+	declare_variable();
+
+	emit_bytes(OP_CLASS, nameConstant);
+	define_variable(nameConstant);
+
+	consume(TOKEN_LEFT_BRACE, "Expect '{' before class body.");
+	consume(TOKEN_RIGHT_BRACE, "Expect '}' after class body.");
+}
+
 static uint8_t make_constant(Value value)
 {
 	int constant = add_constant(current_chunk(), value);
@@ -596,7 +609,9 @@ static void consume(TokenType type, const char *message)
 
 static void declaration(void)
 {
-	if (match(TOKEN_FUN)) {
+	if (match(TOKEN_CLASS)) {
+		class_declaration();
+	} else if (match(TOKEN_FUN)) {
 		fun_declaration();
 	} else if (match(TOKEN_VAR)) {
 		var_declaration();
