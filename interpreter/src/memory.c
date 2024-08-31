@@ -53,6 +53,12 @@ static void free_object(Obj *object)
 
 	// Check for object type and free accordingly
 	switch (object->type) {
+	case OBJ_INSTANCE: {
+		ObjInstance *instance = (ObjInstance *)object;
+		free_table(&instance->fields);
+		FREE(ObjInstance, object);
+		break;
+	}
 	case OBJ_CLASS: {
 		FREE(ObjClass, object);
 		break;
@@ -151,6 +157,12 @@ static void blacken_object(Obj *object)
 #endif
 
 	switch (object->type) {
+	case OBJ_INSTANCE: {
+		ObjInstance *instance = (ObjInstance *)object;
+		mark_object((Obj *)instance->class_);
+		mark_table(&instance->fields);
+		break;
+	}
 	case OBJ_CLASS: {
 		ObjClass *klass = (ObjClass *)object;
 		mark_object((Obj *)klass->name);

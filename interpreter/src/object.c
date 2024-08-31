@@ -29,6 +29,9 @@ static void print_function(ObjFunction *function)
 void print_object(Value value)
 {
 	switch (OBJ_TYPE(value)) {
+	case OBJ_INSTANCE:
+		printf("%s instance", AS_INSTANCE(value)->class_->name->chars);
+		break;
 	case OBJ_CLASS:
 		printf("%s", AS_CLASS(value)->name->chars);
 		break;
@@ -188,4 +191,12 @@ ObjClass *new_class(ObjString *name)
 	ObjClass *klass = ALLOCATE_OBJ(ObjClass, OBJ_CLASS);
 	klass->name = name;
 	return klass;
+}
+
+ObjInstance *new_instance(ObjClass *class_)
+{
+	ObjInstance *instance = ALLOCATE_OBJ(ObjInstance, OBJ_INSTANCE);
+	instance->class_ = class_;
+	init_table(&instance->fields);
+	return instance;
 }

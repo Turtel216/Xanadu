@@ -334,6 +334,12 @@ static bool call_value(Value callee, int argCount)
 {
 	if (IS_OBJ(callee)) {
 		switch (OBJ_TYPE(callee)) {
+		case OBJ_CLASS: {
+			ObjClass *klass = AS_CLASS(callee);
+			vm.stackTop[-argCount - 1] =
+				OBJ_VAL(new_instance(klass));
+			return true;
+		}
 		case OBJ_NATIVE: {
 			NativeFn native = AS_NATIVE(callee);
 			Value result = native(argCount, vm.stackTop - argCount);

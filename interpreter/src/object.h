@@ -8,6 +8,7 @@
 #include "common.h"
 #include "value.h"
 #include "chunk.h"
+#include "lookup_table.h"
 
 // Macro for getting the type of an object
 #define OBJ_TYPE(value) (AS_OBJ(value)->type)
@@ -29,10 +30,14 @@
 #define AS_CLOSURE(value) ((ObjClosure *)AS_OBJ(value))
 // Macro for checking if an object is a function object
 #define IS_FUNCTION(value) isObjType(value, OBJ_FUNCTION)
-// Macro for checking if an object is a Xanadu Object
+// Macro for checking if an object is a xanadu object
 #define IS_CLASS(value) isObjType(value, OBJ_CLASS)
 // Macro for converting a value type to a xanadu object
 #define AS_CLASS(value) ((ObjClass *)AS_OBJ(value))
+// Macro for checking if an object is a xanadu object instance
+#define IS_INSTANCE(value) isObjType(value, OBJ_INSTANCE)
+// Macro for converting a value type to a xanadu object instance
+#define AS_INSTANCE(value) ((ObjInstance *)AS_OBJ(value))
 
 // Enum containing the types of objects
 typedef enum {
@@ -42,6 +47,7 @@ typedef enum {
 	OBJ_CLOSURE,
 	OBJ_UPVALUE,
 	OBJ_CLASS,
+	OBJ_INSTANCE,
 } ObjType;
 
 // Object for the Xanadu VM
@@ -99,6 +105,13 @@ typedef struct {
 	ObjString *name;
 } ObjClass;
 
+// Object wrapper for Xanadu Object Instances
+typedef struct {
+	Obj obj;
+	ObjClass *class_;
+	Table fields;
+} ObjInstance;
+
 // Returns true value is of the given object type
 static inline bool isObjType(Value value, ObjType type)
 {
@@ -121,5 +134,7 @@ ObjClosure *new_closure(ObjFunction *function);
 ObjUpvalue *new_upvalue(Value *slot);
 // Create a Class Object
 ObjClass *new_class(ObjString *name);
+// Create a object instance Object
+ObjInstance *new_instance(ObjClass *class_);
 
 #endif
