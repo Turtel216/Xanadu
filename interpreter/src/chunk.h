@@ -40,6 +40,8 @@ typedef enum {
 	OP_PRINT,
 	OP_RETURN,
 	OP_CLASS,
+	OP_GET_PROPERTY,
+	OP_SET_PROPERTY,
 } OpCode;
 
 // Chunk holding byte code

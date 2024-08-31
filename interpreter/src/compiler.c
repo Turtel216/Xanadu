@@ -105,6 +105,7 @@ static void emit_constant(Value value);
 static void patch_jump(int offset);
 // Xanadu function call
 static void call(bool canAssign);
+static void dot(bool canAssign);
 static uint8_t make_constant(Value value);
 static void unary(bool can_assign);
 static void grouping(bool can_assign);
@@ -308,6 +309,19 @@ static void call(bool canAssign)
 	emit_bytes(OP_CALL, argCount);
 }
 
+static void dot(bool canAssign)
+{
+	consume(TOKEN_IDENTIFIER, "Expect property name after '.'.");
+	uint8_t name = identifier_constant(&parser.previous);
+
+	if (canAssign && match(TOKEN_EQUAL)) {
+		expression();
+		emit_bytes(OP_SET_PROPERTY, name);
+	} else {
+		emit_bytes(OP_GET_PROPERTY, name);
+	}
+}
+
 // Compile literal
 static void literal(bool can_assign)
 {
@@ -487,7 +501,7 @@ ParseRule rules[] = {
 	[TOKEN_LEFT_BRACE] = { NULL, NULL, PREC_NONE },
 	[TOKEN_RIGHT_BRACE] = { NULL, NULL, PREC_NONE },
 	[TOKEN_COMMA] = { NULL, NULL, PREC_NONE },
-	[TOKEN_DOT] = { NULL, NULL, PREC_NONE },
+	[TOKEN_DOT] = { NULL, dot, PREC_CALL },
 	[TOKEN_MINUS] = { unary, binary, PREC_TERM },
 	[TOKEN_PLUS] = { NULL, binary, PREC_TERM },
 	[TOKEN_SEMICOLON] = { NULL, NULL, PREC_NONE },
