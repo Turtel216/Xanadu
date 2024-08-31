@@ -135,3 +135,7 @@ overtune Band
 ## Tooling
 
 - Code editor with syntax highlighting: [Heaven's Door](https://github.com/Turtel216/Heavens-Door)
+
+## Examples
+
+You can find several examples covering the features of Xanadu in the [examples directory](https://github.com/Turtel216/Xanadu/tree/main/examples)
