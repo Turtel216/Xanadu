@@ -1,0 +1,12 @@
+// Recursive function for calculating factorials
+subdivision factorial(num) {
+	freewill (num == 0 or num == 1) {
+		limelight 1;
+	}
+	limelight num * factorial(num - 1);
+}
+
+yyz input = 5;
+
+// Print the factorial of 5
+blabla factorial(input); // The expected value is 5

@@ -1,0 +1,23 @@
+// Function to calculate nth fibonacci number
+subdivision fib(num) {
+	yyz a = 0;
+	yyz b = 1;
+	yyz c = 0;
+
+	freewill (num == 0) {
+		limelight a;
+	}
+
+	circumstances(yyz i = 2; i <= num; i = i + 1) {
+		c = a + b;
+		a = b;
+		b = c;
+	}
+
+	limelight b;
+}
+
+yyz input = 9;
+
+// Calculate and print 9th fibonacci number
+blabla fib(input); // Expected output is 34		

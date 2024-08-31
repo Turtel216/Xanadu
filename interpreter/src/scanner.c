@@ -205,7 +205,7 @@ static TokenType identifier_type(void)
 		if (scanner.current - scanner.start > 1) {
 			switch (scanner.start[1]) {
 			case 'r':
-				return check_keyword(2, 1, "r", TOKEN_OR);
+				return check_keyword(2, 0, "r", TOKEN_OR);
 			case 'v':
 				return check_keyword(2, 6, "ertune",
 						     TOKEN_CLASS);
