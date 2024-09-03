@@ -62,7 +62,7 @@ typedef struct {
 } Upvalue;
 
 // Enum tracking types of functions
-typedef enum { TYPE_FUNCTION, TYPE_SCRIPT } FunctionType;
+typedef enum { TYPE_FUNCTION, TYPE_SCRIPT, TYPE_METHOD } FunctionType;
 
 // Keep track of compiler state
 typedef struct Compiler {
@@ -158,6 +158,8 @@ static void fun_declaration(void);
 static void function(FunctionType type);
 // Compile String
 static void variable(bool can_assign);
+// Compile this statement
+static void _this(bool canAssign);
 static void named_variable(Token name, bool can_assign);
 static int resolve_upvalue(Compiler *compiler, Token *name);
 static void init_compiler(Compiler *compiler, FunctionType type);
@@ -189,8 +191,13 @@ static void init_compiler(Compiler *compiler, FunctionType type)
 	local->depth = 0;
 	// Mark as uncaptured
 	local->isCaptured = false;
-	local->name.start = "";
-	local->name.length = 0;
+	if (type != TYPE_FUNCTION) {
+		local->name.start = "this";
+		local->name.length = 4;
+	} else {
+		local->name.start = "";
+		local->name.length = 0;
+	}
 }
 
 // Compile source string
@@ -415,6 +422,12 @@ static void variable(bool can_assign)
 	named_variable(parser.previous, can_assign);
 }
 
+// Compile this statement
+static void _this(bool canAssign)
+{
+	variable(false);
+}
+
 static void function(FunctionType type)
 {
 	Compiler compiler;
@@ -453,7 +466,7 @@ static void method()
 	consume(TOKEN_IDENTIFIER, "Expect method name.");
 	uint8_t constant = identifier_constant(&parser.previous);
 
-	FunctionType type = TYPE_FUNCTION;
+	FunctionType type = TYPE_METHOD;
 	function(type);
 	emit_bytes(OP_METHOD, constant);
 }
@@ -546,7 +559,7 @@ ParseRule rules[] = {
 	[TOKEN_PRINT] = { NULL, NULL, PREC_NONE },
 	[TOKEN_RETURN] = { NULL, NULL, PREC_NONE },
 	[TOKEN_SUPER] = { NULL, NULL, PREC_NONE },
-	[TOKEN_THIS] = { NULL, NULL, PREC_NONE },
+	[TOKEN_THIS] = { _this, NULL, PREC_NONE },
 	[TOKEN_TRUE] = { literal, NULL, PREC_NONE },
 	[TOKEN_VAR] = { NULL, NULL, PREC_NONE },
 	[TOKEN_WHILE] = { NULL, NULL, PREC_NONE },

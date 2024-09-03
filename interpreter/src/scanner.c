@@ -225,8 +225,8 @@ static TokenType identifier_type(void)
 	case 't':
 		if (scanner.current - scanner.start > 1) {
 			switch (scanner.start[1]) {
-			case 'h':
-				return check_keyword(2, 2, "is", TOKEN_THIS);
+			case 'o':
+				return check_keyword(2, 4, "days", TOKEN_THIS);
 			case 'r':
 				return check_keyword(2, 2, "ue", TOKEN_TRUE);
 			}
