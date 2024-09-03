@@ -53,6 +53,9 @@ static void free_object(Obj *object)
 
 	// Check for object type and free accordingly
 	switch (object->type) {
+	case OBJ_BOUND_METHOD:
+		FREE(ObjBoundMethod, object);
+		break;
 	case OBJ_INSTANCE: {
 		ObjInstance *instance = (ObjInstance *)object;
 		free_table(&instance->fields);
@@ -159,6 +162,12 @@ static void blacken_object(Obj *object)
 #endif
 
 	switch (object->type) {
+	case OBJ_BOUND_METHOD: {
+		ObjBoundMethod *bound = (ObjBoundMethod *)object;
+		mark_value(bound->receiver);
+		mark_object((Obj *)bound->method);
+		break;
+	}
 	case OBJ_INSTANCE: {
 		ObjInstance *instance = (ObjInstance *)object;
 		mark_object((Obj *)instance->class_);

@@ -29,6 +29,9 @@ static void print_function(ObjFunction *function)
 void print_object(Value value)
 {
 	switch (OBJ_TYPE(value)) {
+	case OBJ_BOUND_METHOD:
+		print_function(AS_BOUND_METHOD(value)->method->function);
+		break;
 	case OBJ_INSTANCE:
 		printf("%s instance", AS_INSTANCE(value)->class_->name->chars);
 		break;
@@ -201,4 +204,13 @@ ObjInstance *new_instance(ObjClass *class_)
 	instance->class_ = class_;
 	init_table(&instance->fields);
 	return instance;
+}
+
+// Create a object instance Object
+ObjBoundMethod *new_bound_method(Value receiver, ObjClosure *method)
+{
+	ObjBoundMethod *bound = ALLOCATE_OBJ(ObjBoundMethod, OBJ_BOUND_METHOD);
+	bound->receiver = receiver;
+	bound->method = method;
+	return bound;
 }

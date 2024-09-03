@@ -38,6 +38,10 @@
 #define IS_INSTANCE(value) isObjType(value, OBJ_INSTANCE)
 // Macro for converting a value type to a xanadu object instance
 #define AS_INSTANCE(value) ((ObjInstance *)AS_OBJ(value))
+// Macro for checking if an object is a xanadu bound method
+#define IS_BOUND_METHOD(value) isObjType(value, OBJ_BOUND_METHOD)
+// Macro for converting a value type to a xanadu bound method
+#define AS_BOUND_METHOD(value) ((ObjBoundMethod *)AS_OBJ(value))
 
 // Enum containing the types of objects
 typedef enum {
@@ -48,6 +52,7 @@ typedef enum {
 	OBJ_UPVALUE,
 	OBJ_CLASS,
 	OBJ_INSTANCE,
+	OBJ_BOUND_METHOD,
 } ObjType;
 
 // Object for the Xanadu VM
@@ -113,6 +118,13 @@ typedef struct {
 	Table fields;
 } ObjInstance;
 
+// Object wrapper for Xanadu bound method
+typedef struct {
+	Obj obj;
+	Value receiver;
+	ObjClosure *method;
+} ObjBoundMethod;
+
 // Returns true value is of the given object type
 static inline bool isObjType(Value value, ObjType type)
 {
@@ -137,5 +149,6 @@ ObjUpvalue *new_upvalue(Value *slot);
 ObjClass *new_class(ObjString *name);
 // Create a object instance Object
 ObjInstance *new_instance(ObjClass *class_);
-
+// Create a object instance Object
+ObjBoundMethod *new_bound_method(Value receiver, ObjClosure *method);
 #endif

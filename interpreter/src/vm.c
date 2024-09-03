@@ -34,6 +34,7 @@ static Value clock_native(int argCount, Value *args);
 static ObjUpvalue *capture_upvalue(Value *local);
 static void close_upvalues(Value *last);
 static void define_method(ObjString *name);
+static bool bind_method(ObjClass *klass, ObjString *name);
 // Concatenate first 2 strings on the stack
 static void concatenate(void);
 //######################
@@ -166,8 +167,10 @@ static InterpretResult run(void)
 				push(value);
 				break;
 			}
-			runtime_error("Undefined property '%s'.", name->chars);
-			return INTERPRET_RUNTIME_ERROR;
+			if (!bind_method(instance->class_, name)) {
+				return INTERPRET_RUNTIME_ERROR;
+			}
+			break;
 		}
 		case OP_SET_PROPERTY: {
 			if (!IS_INSTANCE(peek(1))) {
@@ -372,6 +375,10 @@ static bool call_value(Value callee, int argCount)
 {
 	if (IS_OBJ(callee)) {
 		switch (OBJ_TYPE(callee)) {
+		case OBJ_BOUND_METHOD: {
+			ObjBoundMethod *bound = AS_BOUND_METHOD(callee);
+			return call(bound->method, argCount);
+		}
 		case OBJ_CLASS: {
 			ObjClass *klass = AS_CLASS(callee);
 			vm.stackTop[-argCount - 1] =
@@ -393,6 +400,20 @@ static bool call_value(Value callee, int argCount)
 	}
 	runtime_error("Can only call functions and classes.");
 	return false;
+}
+
+static bool bind_method(ObjClass *klass, ObjString *name)
+{
+	Value method;
+	if (!table_get_from_table(&klass->methods, name, &method)) {
+		runtime_error("Undefined property '%s'.", name->chars);
+		return false;
+	}
+
+	ObjBoundMethod *bound = new_bound_method(peek(0), AS_CLOSURE(method));
+	pop();
+	push(OBJ_VAL(bound));
+	return true;
 }
 
 static ObjUpvalue *capture_upvalue(Value *local)
@@ -522,18 +543,6 @@ static Value clock_native(int argCount, Value *args)
 {
 	return NUMBER_VAL((double)clock() / CLOCKS_PER_SEC);
 }
-
-/*
-// Grow vm stack's size
-static inline void grow_stack()
-{
-	// Reallocate new stack size
-	vm.stack = realloc(vm.stack, vm.stack_size + STACK_MAX);
-	if (vm.stack == NULL)
-		error_msg_exit("Failed to grow stack");
-}
-TODO
-*/
 
 // Push onto VM stack
 void push(Value value)
