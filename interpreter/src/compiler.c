@@ -75,9 +75,14 @@ typedef struct Compiler {
 	int scopeDepth; // Keeps track of scope level
 } Compiler;
 
+typedef struct ClassCompiler {
+	struct ClassCompiler *enclosing;
+} ClassCompiler;
+
 // Global Variables
 Parser parser;
-Compiler *current;
+Compiler *current = NULL;
+ClassCompiler *currentClass = NULL;
 Chunk *compiling_chunk;
 //#################
 
@@ -425,6 +430,12 @@ static void variable(bool can_assign)
 // Compile this statement
 static void _this(bool canAssign)
 {
+	// Check if inside a class declaration
+	if (currentClass == NULL) {
+		error("Can't use 'this' outside of a class");
+		return;
+	}
+
 	variable(false);
 }
 
@@ -481,6 +492,10 @@ static void class_declaration()
 	emit_bytes(OP_CLASS, nameConstant);
 	define_variable(nameConstant);
 
+	ClassCompiler classCompiler;
+	classCompiler.enclosing = currentClass;
+	currentClass = &classCompiler;
+
 	named_variable(className, false);
 	consume(TOKEN_LEFT_BRACE, "Expect '{' before class body.");
 	while (!check(TOKEN_RIGHT_BRACE) && !check(TOKEN_EOF)) {
@@ -488,6 +503,8 @@ static void class_declaration()
 	}
 	consume(TOKEN_RIGHT_BRACE, "Expect '}' after class body.");
 	emit_byte(OP_POP);
+
+	currentClass = currentClass->enclosing;
 }
 
 static uint8_t make_constant(Value value)
