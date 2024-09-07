@@ -238,6 +238,7 @@ static void mark_roots()
 	// Mark constants and literals
 	// heap allocated by the compiler
 	mark_compiler_roots();
+	mark_object((Obj *)vm.init_string);
 }
 
 static void trace_references()

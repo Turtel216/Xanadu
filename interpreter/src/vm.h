@@ -32,6 +32,7 @@ typedef struct {
 	Table globals; // Hash table of global variables
 	Obj *objects; // Head of object list
 	ObjUpvalue *openUpvalues; // Array of open up values
+	ObjString *init_string;
 	int gray_count;
 	int gray_capacity;
 	Obj **gray_stack;

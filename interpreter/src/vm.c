@@ -63,6 +63,10 @@ void init_vm(void)
 	vm.nextGC = 1024 * 1024;
 
 	init_table(&vm.strings);
+
+	vm.init_string = NULL;
+	vm.init_string = copy_string("init", 4);
+
 	init_table(&vm.globals);
 
 	define_native("clock", clock_native);
@@ -73,6 +77,7 @@ void free_vm(void)
 {
 	free_table(&vm.strings);
 	free_table(&vm.globals);
+	vm.init_string = NULL;
 	free_objects();
 }
 
@@ -167,6 +172,7 @@ static InterpretResult run(void)
 				push(value);
 				break;
 			}
+
 			if (!bind_method(instance->class_, name)) {
 				return INTERPRET_RUNTIME_ERROR;
 			}
@@ -384,7 +390,19 @@ static bool call_value(Value callee, int argCount)
 			ObjClass *klass = AS_CLASS(callee);
 			vm.stackTop[-argCount - 1] =
 				OBJ_VAL(new_instance(klass));
-			return true;
+
+			// Call class initializer
+			Value initializer;
+			if (table_get_from_table(&klass->methods,
+						 vm.init_string,
+						 &initializer)) {
+				return call(AS_CLOSURE(initializer), argCount);
+			} else if (argCount != 0) {
+				runtime_error(
+					"Expected 0 arguments but got %d.",
+					argCount);
+				return false;
+			}
 		}
 		case OBJ_NATIVE: {
 			NativeFn native = AS_NATIVE(callee);
@@ -412,6 +430,7 @@ static bool bind_method(ObjClass *klass, ObjString *name)
 	}
 
 	ObjBoundMethod *bound = new_bound_method(peek(0), AS_CLOSURE(method));
+
 	pop();
 	push(OBJ_VAL(bound));
 	return true;
