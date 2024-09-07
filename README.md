@@ -92,9 +92,39 @@ Classes in Xanadu are declared using the **overtune** keyword
 ```ruby
 overtune Band
 {
-
+    printName(name) {
+        blabla name;
+    }
 }
 ```
+
+You can intialize the above class and use its method like so:
+
+```ruby
+yyz band = Band();
+band.printName("Rush"); // Prints 'Rush' to the console
+```
+
+But you can also use an intializer method (init):
+
+```ruby
+overtune Band
+{
+    init(name) {
+        todays.name = name;
+    }
+
+    printName() {
+        blabla todays.name;
+    }
+}
+
+yyz band = Band("Rush");
+band.printName(); // prints 'Rush' to the console
+```
+
+The keyword **todays** acts as a 'this' keyword in other languages and basically refers to the current class instance.
+
 
 ### Operators
 
