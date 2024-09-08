@@ -82,6 +82,7 @@ typedef struct Compiler {
 
 typedef struct ClassCompiler {
 	struct ClassCompiler *enclosing;
+	bool has_super_class;
 } ClassCompiler;
 
 // Global Variables
@@ -168,6 +169,7 @@ static void fun_declaration(void);
 static void function(FunctionType type);
 // Compile String
 static void variable(bool can_assign);
+static Token synthetic_token(const char *text);
 // Compile this statement
 static void _this(bool canAssign);
 static void named_variable(Token name, bool can_assign);
@@ -435,10 +437,18 @@ static void string(bool can_assign)
 					  parser.previous.length - 2)));
 }
 
-// Compile String
+// Compile Variable
 static void variable(bool can_assign)
 {
 	named_variable(parser.previous, can_assign);
+}
+
+static Token synthetic_token(const char *text)
+{
+	Token token;
+	token.start = text;
+	token.length = (int)strlen(text);
+	return token;
 }
 
 // Compile this statement
@@ -513,8 +523,25 @@ static void class_declaration()
 	define_variable(nameConstant);
 
 	ClassCompiler classCompiler;
+	classCompiler.has_super_class = false;
 	classCompiler.enclosing = currentClass;
 	currentClass = &classCompiler;
+
+	if (match(TOKEN_LESS)) {
+		consume(TOKEN_IDENTIFIER, "Epxected superclass name.");
+		variable(false);
+
+		if (identifiers_equal(&className, &parser.previous)) {
+			error("A class can't inherit from itself.");
+		}
+
+		begin_scope();
+		add_local(synthetic_token("super"));
+		define_variable(0);
+		named_variable(className, false);
+		emit_byte(OP_INHERIT);
+		classCompiler.has_super_class = true;
+	}
 
 	named_variable(className, false);
 	consume(TOKEN_LEFT_BRACE, "Expect '{' before class body.");
@@ -523,6 +550,10 @@ static void class_declaration()
 	}
 	consume(TOKEN_RIGHT_BRACE, "Expect '}' after class body.");
 	emit_byte(OP_POP);
+
+	if (classCompiler.has_super_class) {
+		end_scope();
+	}
 
 	currentClass = currentClass->enclosing;
 }
