@@ -225,9 +225,9 @@ Prerequisites
 
 Before building the project, ensure you have the following installed:
 
-    1. CMake (version 3.30 or higher)
-    2. C Compiler (e.g., GCC, Clang)
-    3. Git (if you're cloning the repository)
+   1. CMake (version 3.30 or higher)
+   2. C Compiler (e.g., GCC, Clang)
+   3. Git (if you're cloning the repository)
 
 ### Build Instructions
 
