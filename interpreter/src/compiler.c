@@ -454,12 +454,12 @@ static Token synthetic_token(const char *text)
 static void super_(bool canAssign)
 {
 	if (currentClass == NULL) {
-		error("Can't use 'rush' outside of a class.");
+		error("Can't use 'syrinx' outside of a class.");
 	} else if (!currentClass->has_super_class) {
-		error("Can't use 'rush' in a class with no superclass.");
+		error("Can't use 'syrinx' in a class with no superclass.");
 	}
 
-	consume(TOKEN_DOT, "Expect '.' after rush'.");
+	consume(TOKEN_DOT, "Expect '.' after 'syrinx'.");
 	consume(TOKEN_IDENTIFIER, "Expect superclass method name.");
 	uint8_t name = identifier_constant(&parser.previous);
 
@@ -467,11 +467,11 @@ static void super_(bool canAssign)
 
 	if (match(TOKEN_LEFT_PAREN)) {
 		uint8_t argCount = argument_list();
-		named_variable(synthetic_token("rush"), false);
+		named_variable(synthetic_token("syrinx"), false);
 		emit_bytes(OP_SUPER_INVOKE, name);
 		emit_byte(argCount);
 	} else {
-		named_variable(synthetic_token("rush"), false);
+		named_variable(synthetic_token("syrinx"), false);
 		emit_bytes(OP_GET_SUPER, name);
 	}
 }
@@ -561,7 +561,7 @@ static void class_declaration()
 		}
 
 		begin_scope();
-		add_local(synthetic_token("rush"));
+		add_local(synthetic_token("syrinx"));
 		define_variable(0);
 
 		named_variable(className, false);

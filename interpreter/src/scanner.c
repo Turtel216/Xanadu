@@ -212,14 +212,21 @@ static TokenType identifier_type(void)
 			}
 		}
 		break;
-	case 'r':
-		return check_keyword(1, 3, "ush", TOKEN_SUPER);
 	case 'b':
 		return check_keyword(1, 5, "labla", TOKEN_PRINT);
 	case 'l':
 		return check_keyword(1, 8, "imelight", TOKEN_RETURN);
 	case 's':
-		return check_keyword(1, 10, "ubdivision", TOKEN_FUN);
+		if (scanner.current - scanner.start > 1) {
+			switch (scanner.start[1]) {
+			case 'u':
+				return check_keyword(2, 9, "bdivision",
+						     TOKEN_FUN);
+			case 'y':
+				return check_keyword(2, 4, "rinx", TOKEN_SUPER);
+			}
+		}
+		break;
 	case 'y':
 		return check_keyword(1, 2, "yz", TOKEN_VAR);
 	case 'w':
