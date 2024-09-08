@@ -293,6 +293,8 @@ Token scan_token(void)
 	case '>':
 		return make_token(match('=') ? TOKEN_GREATER_EQUAL :
 					       TOKEN_GREATER);
+	case ':':
+		return make_token(TOKEN_EXTENDS);
 	case '"':
 		return string();
 	}

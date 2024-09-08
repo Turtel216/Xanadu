@@ -77,8 +77,8 @@ void init_vm(void)
 // Close virtual machine and free up memory
 void free_vm(void)
 {
-	free_table(&vm.strings);
 	free_table(&vm.globals);
+	free_table(&vm.strings);
 	vm.init_string = NULL;
 	free_objects();
 }

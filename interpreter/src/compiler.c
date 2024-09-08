@@ -552,7 +552,7 @@ static void class_declaration()
 	classCompiler.enclosing = currentClass;
 	currentClass = &classCompiler;
 
-	if (match(TOKEN_LESS)) {
+	if (match(TOKEN_EXTENDS)) {
 		consume(TOKEN_IDENTIFIER, "Epxected superclass name.");
 		variable(false);
 
