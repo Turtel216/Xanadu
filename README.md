@@ -2,13 +2,24 @@
 
 #### A simple interpreted esoteric programming language with syntax based on Rush song lyrics and titles
 
-> [!WARNING]
-> The language is still under development and will probably undergo several changes before release. Keywords are most likely to change in the future
+### Table of Contents
+- [Language Overview](#overview)
+    * [Comments](#comments)
+    * [Declarations](#declarations)
+    * [Control Flow](#control)
+    * [Wirtting to the console](#console)
+    * [Classes](#classes)
+    * [Inheritance](#inheritance)
+    * [Operators](#operators)
+- [Tooling](#tooling)
+- [Examples](#examples)
 
+<a name="overview"/>
 ## Language Overview
 
-Xanadu is a dynamically typed object oriented language with automatic memory management in the form of a garbage collector. Each statement has to end with a semicolone ( ; ).
+Xanadu is a dynamically typed object oriented language with automatic memory management in the form of a garbage collector. Each statement has to end with a semicolon( ; ).
 
+<a name="comments"/>
 ### Comments
 
 Comments in Xanadu start with the double forward slash ( // ).
@@ -17,9 +28,10 @@ Comments in Xanadu start with the double forward slash ( // ).
 // this is a comment 
 ```
 
+<a name="declarations"/>
 ### Declarations
 
-The **yyz** keyword is used for declaring variables.
+The **yyz** keyword is used for declaring variables, similar to var, let, or const in Javascript.
 
 ```ruby
 yyz name = "Xanadu";
@@ -33,7 +45,7 @@ subdivision add(a, b) {
 }
 ```
 
-The **limelight** keyword in the above example functions just as a **return** keyword in other languages
+The **limelight** keyword functions similarly to **return**in other languages, terminating the function and returning a value.
 
 The function can later be called like this
 
@@ -41,14 +53,16 @@ The function can later be called like this
 yyz x = add(1, 2); // Assigns value of 3 to variable x
 ```
 
+<a name="console"/>
 ### Writting to the console
 
-To write to the console use the **blabla** keyword 
+To write to the console, use the **blabla** keyword, akin to print() or console.log() in other languages.
 
 ```ruby
 blabla "Piece"; 
 ```
 
+<a name="control"/>
 ### Control flow
 
 **while** loops are declared using the **workingmans_grind** keyword 
@@ -67,7 +81,7 @@ circumstances(yyz i = 0; i < 10; i = i + 1) {
 } 
 ```
 
-**if** statements are declared using the **freewill** keyword
+**freewill** acts like an if statement, executing the block if the condition evaluates to true.
 
 ```ruby
 freewill(1 == 1) {
@@ -75,7 +89,7 @@ freewill(1 == 1) {
 }
 ```
 
-**else** statements are declaed using the **counterpoint** keyword 
+Similar to else, **counterpoint** executes the block if the previous freewill condition was false.
 
 ```ruby
 freewill(1 == 2) {
@@ -85,6 +99,7 @@ freewill(1 == 2) {
 } 
 ```
 
+<a name="classes"/>
 ### Classes
 
 Classes in Xanadu are declared using the **overtune** keyword
@@ -105,7 +120,7 @@ yyz band = Band();
 band.printName("Rush"); // Prints 'Rush' to the console
 ```
 
-But you can also use an intializer method (init):
+You can also use an initializer method (init) to set up class instances, similar to a constructor in other object-oriented languages like Python or Java.
 
 ```ruby
 overtune Band
@@ -125,9 +140,10 @@ band.printName(); // prints 'Rush' to the console
 
 The keyword **todays** acts as a 'this' keyword in other languages and basically refers to the current class instance.
 
+<a name="inheritance"/>
 ### Inheritance
 
-A Xanadu class can inherit from another class using the extends token ':'. Afterwards a derived class can refrence the super class with the **syrinx** keyword.
+A subclass in Xanadu can inherit from a parent class using the colon (:) symbol, similar to other object-oriented languages like Python. The syrinx keyword refers to the parent class's methods and properties, akin to super in Java or Python.
 
 ```ruby
 overtune Band
@@ -154,6 +170,7 @@ yyz rush = Rush("Rush");
 rush.play("2112");
 ```
 
+<a name="operators"/>
 ### Operators
 
 #### Arithmetic Operators 
@@ -169,10 +186,10 @@ rush.play("2112");
 
  | Symbol  |  Operator  | Syntax |
  | :---:   |   :---:    | :---:  |
- |   <     |   Less then    |  a < b  |
- |   >     |   Greater then   |  a > b  |
- |   <=    | Less then or equal to |  a <= b  |
- |   >=    |   Greater then or equal to    | a >= b  |
+ |   <     |   Less than    |  a < b  |
+ |   >     |   Greater than   |  a > b  |
+ |   <=    | Less than or equal to |  a <= b  |
+ |   >=    |   Greater than or equal to    | a >= b  |
  |   ==    |   Equal to   |  a == b  |
  |   !=    |   Not equal to    | a != b  |
 
@@ -190,10 +207,12 @@ rush.play("2112");
  | :---:    |  :---:   |  :---:  |
  |   =      |  Simple Assignment  | a = b  |
 
+<a name="tooling"/>
 ## Tooling
 
-- Code editor with syntax highlighting: [Heaven's Door](https://github.com/Turtel216/Heavens-Door)
+- For a better development experience, Xanadu supports the [Heaven's Door](https://github.com/Turtel216/Heavens-Door) editor, which provides syntax highlighting specifically for the language.
 
+<a name="examples"/>
 ## Examples
 
 You can find several examples covering the features of Xanadu in the [examples directory](https://github.com/Turtel216/Xanadu/tree/main/examples)
