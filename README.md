@@ -15,11 +15,13 @@
 - [Examples](#examples)
 
 <a name="overview"/>
+
 ## Language Overview
 
 Xanadu is a dynamically typed object oriented language with automatic memory management in the form of a garbage collector. Each statement has to end with a semicolon( ; ).
 
 <a name="comments"/>
+
 ### Comments
 
 Comments in Xanadu start with the double forward slash ( // ).
@@ -29,6 +31,7 @@ Comments in Xanadu start with the double forward slash ( // ).
 ```
 
 <a name="declarations"/>
+
 ### Declarations
 
 The **yyz** keyword is used for declaring variables, similar to var, let, or const in Javascript.
@@ -54,6 +57,7 @@ yyz x = add(1, 2); // Assigns value of 3 to variable x
 ```
 
 <a name="console"/>
+
 ### Writting to the console
 
 To write to the console, use the **blabla** keyword, akin to print() or console.log() in other languages.
@@ -63,6 +67,7 @@ blabla "Piece";
 ```
 
 <a name="control"/>
+
 ### Control flow
 
 **while** loops are declared using the **workingmans_grind** keyword 
@@ -100,6 +105,7 @@ freewill(1 == 2) {
 ```
 
 <a name="classes"/>
+
 ### Classes
 
 Classes in Xanadu are declared using the **overtune** keyword
@@ -141,6 +147,7 @@ band.printName(); // prints 'Rush' to the console
 The keyword **todays** acts as a 'this' keyword in other languages and basically refers to the current class instance.
 
 <a name="inheritance"/>
+
 ### Inheritance
 
 A subclass in Xanadu can inherit from a parent class using the colon (:) symbol, similar to other object-oriented languages like Python. The syrinx keyword refers to the parent class's methods and properties, akin to super in Java or Python.
@@ -171,6 +178,7 @@ rush.play("2112");
 ```
 
 <a name="operators"/>
+
 ### Operators
 
 #### Arithmetic Operators 
@@ -208,11 +216,13 @@ rush.play("2112");
  |   =      |  Simple Assignment  | a = b  |
 
 <a name="tooling"/>
+
 ## Tooling
 
 - For a better development experience, Xanadu supports the [Heaven's Door](https://github.com/Turtel216/Heavens-Door) editor, which provides syntax highlighting specifically for the language.
 
 <a name="examples"/>
+
 ## Examples
 
 You can find several examples covering the features of Xanadu in the [examples directory](https://github.com/Turtel216/Xanadu/tree/main/examples)
