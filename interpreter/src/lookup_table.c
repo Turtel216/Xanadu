@@ -30,7 +30,7 @@ void free_table(Table *table)
 // Copy contents of one table into another
 void table_add_all(Table *from, Table *to)
 {
-	for (int i = 0; i < from->capacity; i++) {
+	for (int i = 0; i < from->capacity; ++i) {
 		Entry *entry = &from->entries[i];
 		if (entry->key != NULL) {
 			insert_into_table(to, entry->key, entry->value);

@@ -451,6 +451,31 @@ static Token synthetic_token(const char *text)
 	return token;
 }
 
+static void super_(bool canAssign)
+{
+	if (currentClass == NULL) {
+		error("Can't use 'rush' outside of a class.");
+	} else if (!currentClass->has_super_class) {
+		error("Can't use 'rush' in a class with no superclass.");
+	}
+
+	consume(TOKEN_DOT, "Expect '.' after rush'.");
+	consume(TOKEN_IDENTIFIER, "Expect superclass method name.");
+	uint8_t name = identifier_constant(&parser.previous);
+
+	named_variable(synthetic_token("todays"), false);
+
+	if (match(TOKEN_LEFT_PAREN)) {
+		uint8_t argCount = argument_list();
+		named_variable(synthetic_token("rush"), false);
+		emit_bytes(OP_SUPER_INVOKE, name);
+		emit_byte(argCount);
+	} else {
+		named_variable(synthetic_token("rush"), false);
+		emit_bytes(OP_GET_SUPER, name);
+	}
+}
+
 // Compile this statement
 static void _this(bool canAssign)
 {
@@ -536,8 +561,9 @@ static void class_declaration()
 		}
 
 		begin_scope();
-		add_local(synthetic_token("super"));
+		add_local(synthetic_token("rush"));
 		define_variable(0);
+
 		named_variable(className, false);
 		emit_byte(OP_INHERIT);
 		classCompiler.has_super_class = true;
@@ -626,7 +652,7 @@ ParseRule rules[] = {
 	[TOKEN_OR] = { NULL, or_, PREC_OR },
 	[TOKEN_PRINT] = { NULL, NULL, PREC_NONE },
 	[TOKEN_RETURN] = { NULL, NULL, PREC_NONE },
-	[TOKEN_SUPER] = { NULL, NULL, PREC_NONE },
+	[TOKEN_SUPER] = { super_, NULL, PREC_NONE },
 	[TOKEN_THIS] = { _this, NULL, PREC_NONE },
 	[TOKEN_TRUE] = { literal, NULL, PREC_NONE },
 	[TOKEN_VAR] = { NULL, NULL, PREC_NONE },

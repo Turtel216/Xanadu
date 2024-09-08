@@ -36,6 +36,7 @@ static void close_upvalues(Value *last);
 static void define_method(ObjString *name);
 static bool bind_method(ObjClass *klass, ObjString *name);
 static bool invoke(ObjString *name, int argCount);
+static bool invoke_from_class(ObjClass *klass, ObjString *name, int argCount);
 // Concatenate first 2 strings on the stack
 static void concatenate(void);
 //######################
@@ -146,6 +147,15 @@ static InterpretResult run(void)
 				delete_from_table(&vm.globals, name);
 				runtime_error("Undefined variable '%s'.",
 					      name->chars);
+				return INTERPRET_RUNTIME_ERROR;
+			}
+			break;
+		}
+		case OP_GET_SUPER: {
+			ObjString *name = READ_STRING();
+			ObjClass *superclass = AS_CLASS(pop());
+
+			if (!bind_method(superclass, name)) {
 				return INTERPRET_RUNTIME_ERROR;
 			}
 			break;
@@ -316,6 +326,16 @@ static InterpretResult run(void)
 						frame->closure->upvalues[index];
 				}
 			}
+			break;
+		}
+		case OP_SUPER_INVOKE: {
+			ObjString *method = READ_STRING();
+			int argCount = READ_BYTE();
+			ObjClass *superclass = AS_CLASS(pop());
+			if (!invoke_from_class(superclass, method, argCount)) {
+				return INTERPRET_RUNTIME_ERROR;
+			}
+			frame = &vm.frames[vm.frameCount - 1];
 			break;
 		}
 		case OP_INVOKE: {

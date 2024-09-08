@@ -212,6 +212,8 @@ static TokenType identifier_type(void)
 			}
 		}
 		break;
+	case 'r':
+		return check_keyword(1, 3, "ush", TOKEN_SUPER);
 	case 'b':
 		return check_keyword(1, 5, "labla", TOKEN_PRINT);
 	case 'l':
