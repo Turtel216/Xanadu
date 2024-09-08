@@ -125,6 +125,34 @@ band.printName(); // prints 'Rush' to the console
 
 The keyword **todays** acts as a 'this' keyword in other languages and basically refers to the current class instance.
 
+### Inheritance
+
+A Xanadu class can inherit from another class using the extends token ':'. Afterwards a derived class can refrence the super class with the **syrinx** keyword.
+
+```ruby
+overtune Band
+{
+    init() {}
+
+    playSong(bandName, songName) {
+        blabla bandName + " Plays " + songName;
+    }
+}
+
+overtune Rush : Band 
+{
+    init(name) {
+        todays.name = name;
+    }
+
+    play(song) {
+        syrinx.playSong(todays.name, song);
+    }
+}
+
+yyz rush = Rush("Rush");
+rush.play("2112");
+```
 
 ### Operators
 
