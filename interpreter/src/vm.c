@@ -35,6 +35,7 @@ static ObjUpvalue *capture_upvalue(Value *local);
 static void close_upvalues(Value *last);
 static void define_method(ObjString *name);
 static bool bind_method(ObjClass *klass, ObjString *name);
+static bool invoke(ObjString *name, int argCount);
 // Concatenate first 2 strings on the stack
 static void concatenate(void);
 //######################
@@ -317,6 +318,15 @@ static InterpretResult run(void)
 			}
 			break;
 		}
+		case OP_INVOKE: {
+			ObjString *method = READ_STRING();
+			int argCount = READ_BYTE();
+			if (!invoke(method, argCount)) {
+				return INTERPRET_RUNTIME_ERROR;
+			}
+			frame = &vm.frames[vm.frameCount - 1];
+			break;
+		}
 		case OP_METHOD:
 			define_method(READ_STRING());
 			break;
@@ -419,6 +429,35 @@ static bool call_value(Value callee, int argCount)
 	}
 	runtime_error("Can only call functions and classes.");
 	return false;
+}
+
+static bool invoke_from_class(ObjClass *klass, ObjString *name, int argCount)
+{
+	Value method;
+	if (!table_get_from_table(&klass->methods, name, &method)) {
+		runtime_error("Undefined property '%s'.", name->chars);
+		return false;
+	}
+	return call(AS_CLOSURE(method), argCount);
+}
+
+static bool invoke(ObjString *name, int argCount)
+{
+	Value receiver = peek(argCount);
+
+	if (!IS_INSTANCE(receiver)) {
+		runtime_error("Only instances have methods.");
+		return false;
+	}
+	ObjInstance *instance = AS_INSTANCE(receiver);
+
+	Value value;
+	if (table_get_from_table(&instance->fields, name, &value)) {
+		vm.stackTop[-argCount - 1] = value;
+		return call_value(value, argCount);
+	}
+
+	return invoke_from_class(instance->class_, name, argCount);
 }
 
 static bool bind_method(ObjClass *klass, ObjString *name)
