@@ -11,6 +11,7 @@
     * [Classes](#classes)
     * [Inheritance](#inheritance)
     * [Operators](#operators)
+- [Building Xanadu](#build)
 - [Tooling](#tooling)
 - [Examples](#examples)
 
@@ -214,6 +215,59 @@ rush.play("2112");
  | Symbol   | Operator |  Syntax |
  | :---:    |  :---:   |  :---:  |
  |   =      |  Simple Assignment  | a = b  |
+
+<a name="build"/>
+
+## Building Xanadu
+
+To build the Xanadu programming language from source using CMake, follow the instructions below. Ensure that you have CMake and a compatible C++ compiler installed on your system.
+Prerequisites
+
+Before building the project, ensure you have the following installed:
+
+    1. CMake (version 3.30 or higher)
+    2. C Compiler (e.g., GCC, Clang)
+    3. Git (if you're cloning the repository)
+
+### Build Instructions
+
+1. **Clone the repository**(if you haven't already):
+
+```
+git clone https://github.com/Turtel216/Xanadu.git
+cd Xanadu/interpreter
+```
+
+2. **Create a build directory**: It's recommended to create a separate directory for the build files.
+
+```
+mkdir build
+cd build
+```
+
+3. **Run CMake**: Configure the project with CMake. In this step, CMake generates the necessary makefiles or project files based on your system's environment.
+
+```
+cmake ..
+```
+
+4. **Build the project**: Once CMake configuration is complete, you can build the project. This will compile the source code and generate the Xanadu executable(xi).
+
+```
+cmake --build .
+```
+
+5. **Run Xanadu**: After the build is successful, you can run the Xanadu interpreter:
+
+```
+./xi
+```
+
+You can also provide the interpreter with a xanadu source file:
+
+```
+./xi file.xa
+```
 
 <a name="tooling"/>
 
