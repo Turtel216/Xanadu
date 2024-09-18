@@ -1,8 +1,9 @@
 // copyright 2024 dimitrios papakonstantinou. all rights reserved.
-// use of this source code is governed by a MIT
-// license that can be found in the license file.
+// use of this source code is governed by an MIT
+// license that can be found in the LICENSE file.
 
-#define GC_HEAP_GROW_FACTOR 2
+#define GC_HEAP_GROW_FACTOR \
+	2 // Factor by which the garbage collector heap grows
 
 #include <stdlib.h>
 
@@ -17,16 +18,29 @@
 #include "debug.h"
 #endif
 
-// Realocate given type
+// Reallocate memory for a given pointer.
+// Adjusts the allocated memory from oldSize to newSize.
+// Updates the VM's bytesAllocated count and may trigger garbage collection
+// if the new allocation exceeds the current threshold.
+//
+// Parameters:
+//   pointer - Pointer to the memory to reallocate
+//   oldSize - Previous size of the memory allocation
+//   newSize - New size of the memory allocation
+//
+// Returns:
+//   A pointer to the reallocated memory
 void *reallocate(void *pointer, size_t oldSize, size_t newSize)
 {
 	vm.bytesAllocated += newSize - oldSize;
 
 	if (newSize > oldSize) {
 #ifdef DEBUG_STRESS_GC
+		// Force garbage collection for testing purposes
 		collect_garbage();
 #endif
 
+		// Perform garbage collection if memory usage exceeds the threshold
 		if (vm.bytesAllocated > vm.nextGC) {
 			collect_garbage();
 		}
@@ -44,14 +58,18 @@ void *reallocate(void *pointer, size_t oldSize, size_t newSize)
 	return result;
 }
 
-// Free Xanadu VM object
+// Free a specific Xanadu VM object based on its type.
+// Releases memory and resources associated with the object.
+//
+// Parameters:
+//   object - The object to free
 static void free_object(Obj *object)
 {
 #ifdef DEBUG_LOG_GC
 	printf("%p free type %d\n", (void *)object, object->type);
 #endif
 
-	// Check for object type and free accordingly
+	// Free memory based on the object type
 	switch (object->type) {
 	case OBJ_BOUND_METHOD:
 		FREE(ObjBoundMethod, object);
@@ -96,7 +114,10 @@ static void free_object(Obj *object)
 	}
 }
 
-// Free all objects from Xanadu VM
+// Free all objects currently in the Xanadu VM.
+// This includes iterating through and freeing each object in the list.
+//
+// This function also frees the gray stack used for garbage collection.
 void free_objects(void)
 {
 	Obj *object = vm.objects;
@@ -109,7 +130,12 @@ void free_objects(void)
 	free(vm.gray_stack);
 }
 
-// Mark a xanadu object for garbage collection
+// Mark a Xanadu object for garbage collection.
+// This function ensures that the object is marked so that it is not
+// collected during garbage collection.
+//
+// Parameters:
+//   object - The object to mark
 void mark_object(Obj *object)
 {
 	if (object == NULL)
@@ -126,6 +152,7 @@ void mark_object(Obj *object)
 
 	object->is_marked = true;
 
+	// Ensure there is enough space in the gray stack
 	if (vm.gray_capacity < vm.gray_count + 1) {
 		vm.gray_capacity = GROW_CAPACITY(vm.gray_capacity);
 		vm.gray_stack = (Obj **)realloc(
@@ -138,14 +165,20 @@ void mark_object(Obj *object)
 		exit(1);
 }
 
-// Mark a xanadu value for garbage collection
+// Mark a Xanadu value for garbage collection if it is a heap object.
+//
+// Parameters:
+//   value - The value to mark
 void mark_value(Value value)
 {
-	// Check if value is a heap object
 	if (IS_OBJ(value))
 		mark_object(AS_OBJ(value));
 }
 
+// Mark all values in an array for garbage collection.
+//
+// Parameters:
+//   array - The array of values to mark
 static void mark_array(ValueArray *array)
 {
 	for (int i = 0; i < array->count; i++) {
@@ -153,6 +186,12 @@ static void mark_array(ValueArray *array)
 	}
 }
 
+// Process an object for garbage collection.
+// Marks the object and its references (if any) to ensure they are not
+// collected prematurely.
+//
+// Parameters:
+//   object - The object to process
 static void blacken_object(Obj *object)
 {
 #ifdef DEBUG_LOG_GC
@@ -161,6 +200,7 @@ static void blacken_object(Obj *object)
 	printf("\n");
 #endif
 
+	// Mark references contained within the object based on its type
 	switch (object->type) {
 	case OBJ_BOUND_METHOD: {
 		ObjBoundMethod *bound = (ObjBoundMethod *)object;
@@ -199,11 +239,15 @@ static void blacken_object(Obj *object)
 	}
 	case OBJ_NATIVE:
 	case OBJ_STRING:
+		// No additional marking required for native and string objects
 		break;
 	}
 }
 
-// Mark global xanadu variables
+// Mark all global variables in the given table for garbage collection.
+//
+// Parameters:
+//   table - The table containing global variables to mark
 void mark_table(Table *table)
 {
 	for (int i = 0; i < table->capacity; i++) {
@@ -213,34 +257,41 @@ void mark_table(Table *table)
 	}
 }
 
-// Mark the beginnings of the 'object graph'
+// Mark the roots of the object graph for garbage collection.
+// This includes the stack, frames, upvalues, global variables, and constants.
+//
+// This function sets the initial state for the garbage collector by marking
+// all live objects.
 static void mark_roots()
 {
-	// Mark local roots
+	// Mark values on the stack
 	for (Value *slot = vm.stack; slot < vm.stackTop; slot++) {
 		mark_value(*slot);
 	}
 
-	// Mark closure roots
+	// Mark closures in the call frames
 	for (int i = 0; i < vm.frameCount; i++) {
 		mark_object((Obj *)vm.frames[i].closure);
 	}
 
-	// Mark upvalues
+	// Mark open upvalues
 	for (ObjUpvalue *upvalue = vm.openUpvalues; upvalue != NULL;
 	     upvalue = upvalue->next) {
 		mark_object((Obj *)upvalue);
 	}
 
-	// Mark global roots
+	// Mark global variables
 	mark_table(&vm.globals);
 
 	// Mark constants and literals
-	// heap allocated by the compiler
 	mark_compiler_roots();
 	mark_object((Obj *)vm.init_string);
 }
 
+// Trace and mark all reachable objects from the gray stack.
+//
+// This function processes all objects in the gray stack and marks their
+// references, transitioning them to the black state.
 static void trace_references()
 {
 	while (vm.gray_count > 0) {
@@ -249,6 +300,10 @@ static void trace_references()
 	}
 }
 
+// Sweep through all objects and free those that are no longer marked.
+//
+// This function reclaims memory for objects that were not reachable during
+// the garbage collection phase.
 static void sweep()
 {
 	Obj *previous = NULL;
@@ -268,11 +323,15 @@ static void sweep()
 			}
 
 			free_object(unreached);
+			// Continue sweeping from the next object
 		}
 	}
 }
 
-// Free unused xanadu variables
+// Perform garbage collection to reclaim unused memory.
+// This involves marking roots, tracing references, and sweeping unreachable objects.
+//
+// This function updates the threshold for the next garbage collection cycle.
 void collect_garbage(void)
 {
 #ifdef DEBUG_LOG_GC
@@ -280,11 +339,12 @@ void collect_garbage(void)
 	size_t before = vm.bytesAllocated;
 #endif
 
-	mark_roots();
-	trace_references();
-	table_remove_white(&vm.strings);
-	sweep();
+	mark_roots(); // Mark all roots in the VM
+	trace_references(); // Trace and mark all reachable objects
+	table_remove_white(&vm.strings); // Remove and free unreferenced strings
+	sweep(); // Free all unreachable objects
 
+	// Set the threshold for the next garbage collection
 	vm.nextGC = vm.bytesAllocated * GC_HEAP_GROW_FACTOR;
 
 #ifdef DEBUG_LOG_GC

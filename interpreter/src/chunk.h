@@ -2,8 +2,8 @@
 // Use of this source code is governed by an MIT
 // license that can be found in the LICENSE file.
 
-#ifndef clox_chunk_h
-#define clox_chunk_h
+#ifndef xanadu_chunk_h
+#define xanadu_chunk_h
 
 #include "common.h"
 #include "value.h"
