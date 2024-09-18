@@ -1,76 +1,114 @@
 // copyright 2024 dimitrios papakonstantinou. all rights reserved.
-// use of this source code is governed by a MIT
-// license that can be found in the license file.
+// use of this source code is governed by an MIT
+// license that can be found in the LICENSE file.
 
 #ifndef xanadu_value_h
 #define xanadu_value_h
 
 #include "common.h"
 
-// Marcos for converting C values into Xanadu values
+// Macros for creating Xanadu values from C values
+// These macros help in constructing Value objects for different types.
+
+// Create a boolean Value
 #define BOOL_VAL(value) ((Value){ VAL_BOOL, { .boolean = value } })
+// Create a nil Value
 #define NIL_VAL ((Value){ VAL_NIL, { .number = 0 } })
+// Create a number Value
 #define NUMBER_VAL(value) ((Value){ VAL_NUMBER, { .number = value } })
 //##################################################
 
-// Marcos for converting Xanadu values into C values
+// Macros for extracting C values from Xanadu values
+// These macros help in extracting the underlying data from Value objects.
+
+// Extract a boolean from a Value
 #define AS_BOOL(value) ((value).as.boolean)
+// Extract a number from a Value
 #define AS_NUMBER(value) ((value).as.number)
+// Extract an object from a Value
 #define AS_OBJ(value) ((value).as.obj)
 //##################################################
 
-// Marcos for checking a values type
+// Macros for checking the type of a Value
+// These macros help in determining the type of a Value object.
+
+// Check if the Value is a boolean
 #define IS_BOOL(value) ((value).type == VAL_BOOL)
+// Check if the Value is nil
 #define IS_NIL(value) ((value).type == VAL_NIL)
+// Check if the Value is a number
 #define IS_NUMBER(value) ((value).type == VAL_NUMBER)
+// Check if the Value is an object
 #define IS_OBJ(value) ((value).type == VAL_OBJ)
 //##################################
 
-// Macro for converting Object type to value type
+// Macro for creating a Value from an object
+// This macro helps in creating a Value that wraps an object.
 #define OBJ_VAL(object) ((Value){ VAL_OBJ, { .obj = (Obj *)object } })
 
-// The kind of type of a value
+// Enum for representing the type of a Value
 typedef enum {
-	VAL_BOOL,
-	VAL_NIL,
-	VAL_NUMBER,
-	VAL_OBJ,
+	VAL_BOOL, // Boolean value
+	VAL_NIL, // Nil value
+	VAL_NUMBER, // Number value
+	VAL_OBJ, // Object value
 } ValueType;
 
+// Forward declarations of object types
 typedef struct Obj Obj;
 typedef struct ObjString ObjString;
 
-// The information of a type
+// Structure representing a Value in Xanadu VM
 typedef struct {
-	ValueType type;
+	ValueType type; // Type of the value
 	union {
-		bool boolean;
-		double number;
-		Obj *obj;
-	} as;
+		bool boolean; // Boolean value
+		double number; // Numeric value
+		Obj *obj; // Object pointer
+	} as; // Union for holding the actual value
 } Value;
 
+// Structure representing an array of Values
 typedef struct {
-	int capacity;
-	int count;
-	Value *values;
+	int capacity; // Capacity of the array
+	int count; // Number of values currently in the array
+	Value *values; // Pointer to the array of Values
 } ValueArray;
 
+// Enum for representing the result of interpreting code
 typedef enum {
-	INTERPRET_OK,
-	INTERPRET_COMPILE_ERROR,
-	INTERPRET_RUNTIME_ERROR
+	INTERPRET_OK, // Interpretation succeeded
+	INTERPRET_COMPILE_ERROR, // Compilation error
+	INTERPRET_RUNTIME_ERROR // Runtime error
 } InterpretResult;
 
-// Initialize array of value structs
+// Function prototypes
+
+// Initialize a ValueArray with default values
 void init_value_array(ValueArray *array);
-// Add value to value array
+
+// Add a new Value to the end of a ValueArray
+// Parameters:
+//   array - The ValueArray to which the value will be added
+//   value - The Value to add
 void write_value_array(ValueArray *array, Value value);
-// Free array of value structs
+
+// Free memory allocated for a ValueArray
+// Parameters:
+//   array - The ValueArray to free
 void free_value_array(ValueArray *array);
-// Print value to iostream
+
+// Print a Value to the standard output
+// Parameters:
+//   value - The Value to print
 void print_value(Value value);
-// Checks if two values are equal
+
+// Check if two Values are equal
+// Parameters:
+//   a - The first Value
+//   b - The second Value
+// Returns:
+//   true if the Values are equal, false otherwise
 bool values_equal(Value a, Value b);
 
 #endif
