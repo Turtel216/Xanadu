@@ -1,6 +1,6 @@
-// copyright 2024 dimitrios papakonstantinou. all rights reserved.
-// use of this source code is governed by a MIT
-// license that can be found in the license file.
+// Copyright 2024 Dimitrios Papakonstantinou. All rights reserved.
+// Use of this source code is governed by a MIT
+// license that can be found in the LICENSE file.
 
 #include <stdio.h>
 
