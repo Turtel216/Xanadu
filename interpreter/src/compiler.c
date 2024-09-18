@@ -1,6 +1,9 @@
 // Copyright 2024 Dimitrios Papakonstantinou. All rights reserved.
 // Use of this source code is governed by a MIT
 // license that can be found in the LICENSE file.
+//
+// This file contains the implementation the parser for Xanadu. It defines parsing rules
+// and precedence, manages compiler state, and handles expressions, variables, and control flow structures.
 
 #include "value.h"
 #include "compiler.h"
