@@ -2,6 +2,9 @@
 
 #### A simple interpreted esoteric programming language with syntax based on Rush song lyrics and titles
 
+> [!NOTE]  
+> This is the first stable version of Xanadu. Performance improvements and more features will be added in the future
+
 ### Table of Contents
 - [Language Overview](#overview)
     * [Comments](#comments)
